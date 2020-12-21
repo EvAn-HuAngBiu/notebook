@@ -1,0 +1,198 @@
+<tabs class="top-fixed" active-name="{{currentTab}}" bindtabchange="tabsOne" tabs-underline-color="#F55E68"
+    tabs-active-text-color="#F55E68">
+    <tab-item s-for="tab in tabs" name="{{tab.name}}" label="{{tab.label}}" bindtap="swiperNav"
+        data-current="{{tab.name}}"></tab-item>
+</tabs>
+<view style="top:40px; height:104.1rpx" class="top-fixed top-border-line">
+    <view style="display: flex;background-color: {{tagBarBackground}}; height:104.1rpx">
+        <scroll-view scroll-x="true" scroll-into-view="{= scrollIntoView =}" class="scroll-view-style"
+            scroll-with-animation="true" style="background-color:{{tagBarBackground}}">
+            <block s-for="tag in tags">
+                <!-- <button size="default" class="tag-btn-style {{currentTag == tag.tagId ? 'on' : ''}}"
+            data-current="{{tag.tagId}}" bindtap="switchTag">{{tag.tagName}}</button> -->
+                <view class="tag-btn-style {{currentTag == tag.tagId ? 'on' : ''}}" data-current="{{tag.tagId}}"
+                    id="{{'view-' + tag.tagId}}" bindtap="switchTag">{{tag.tagName}}</view>
+            </block>
+        </scroll-view>
+        <view class="transparnt-view" s-if="{{tagBarBackground != '#ffffff'}}"></view>
+        <view class="collapse-view-point" bind:tap="showExpand">
+            <smt-icon name="arrow-down" s-if="{{tagExpand === false}}" color="{{arrowColor}}" size="36rpx">
+            </smt-icon>
+            <smt-icon name="arrow-up" s-else color="{{arrowColor}}" size="36rpx">
+            </smt-icon>
+        </view>
+    </view>
+</view>
+
+<view s-if="{{shareList.length != 0}}" class="wrap wrap-global-block" id="wrap-global-id">
+    <view s-for="share, idx in shareList" class="gray-card-area">
+        <view class="userinfo-global-block">
+            <view class="userinfo-message">
+                <image class="userinfo-avatar" src="{{share.userDo.avatar}}"></image>
+                <view class="userinfo-block">
+                    <text class="userinfo-nickname">{{share.userDo.nickname}}</text>
+                    <text class="userinfo-time">{{share.shareDo.modifyTime}}</text>
+                </view>
+            </view>
+            <view class="userinfo-like">
+                <view class="button-box button-box-mixture">
+                    <smt-like is-liked="{{share.like}}" class="custom-class-mixture" mode="mixture"
+                        likeNum="{{share.shareDo.likeCnt}}" bind:fail="failLike" bind:error="nologin"
+                        data-idx="{{idx}}" animation-type="2">
+                    </smt-like>
+                    <smt-like is-liked="{{share.collect}}" class="custom-class-mixture" likeNum="{{share.shareDo.collectCnt}}" mode="mixture"
+                        icon-type="heart" like-text="收藏" bind:fail="failCollect" bind:error="nologin"
+                        data-idx="{{idx}}" animation-type="2">
+                    </smt-like>
+                    <view class="card-share-style">
+                        <image src="../../images/share.png" class="card-share-image" bindtap="shareRecord"
+                            data-idx="{{idx}}"></image>
+                    </view>
+                </view>
+            </view>
+        </view>
+        <view class="card-area-block">
+            <view class="red-card-area" catchtap="showShareDetail" s-if="{{redCnts[idx] > 0}}" data-open-type="0" data-share-idx="{{idx}}">
+                <scroll-view scroll-y="true" class="card-scroll-view-style">
+                    <view s-for="record in share.recordDo" class="record-item">
+                        <block s-if="{{record.recordType == 0}}">
+                            <view class="record-item-img" style="background-color: #F55E68; border-radius:50%;">
+                            <image s-if="{{record.picUrl.length == 0}}" style="width: 48rpx;height: 48rpx; transform: scale(0.6);"
+                                src="../../images/tag/{{share.shareDo.tagId}}.png">
+                            </image>
+                            <image s-else class="record-item-img-src" src="{{record.picUrl[0]}}" mode="aspectFill"></image>
+                        </view>
+                            <!-- <icon s-else type="info" size="24" color="white" style="margin: 16rpx"></icon> -->
+                            <view class="record-item-text">{{record.recordTitle}}</view>
+                            <block s-if="{{record.picUrl.length > 0}}">
+                                <view class="record-item-image-cnt-block" style="background: #F55E68;">
+                                    <image class="record-item-multi-image" src="../../images/multi-image.png" mode="widthFix"></image>
+                                    <text class="record-item-multi-image-cnt">{{record.picUrl.length}}</text>
+                                </view>
+                            </block>
+                        </block>
+                    </view>
+                </scroll-view>
+            </view>
+            <view class="black-card-area" catchtap="showShareDetail" s-if="{{blackCnts[idx] > 0}}" data-open-type="1" data-share-idx="{{idx}}">
+                <scroll-view scroll-y="true" class="card-scroll-view-style">
+                    <view s-for="record in share.recordDo" class="record-item">
+                        <block s-if="{{record.recordType == 1}}">
+                            <view class="record-item-img" style="background-color: #707070; border-radius:50%;">
+                            <image s-if="{{record.picUrl.length == 0}}" style="width: 48rpx;height: 48rpx; transform: scale(0.6);"
+                                src="../../images/tag/{{share.shareDo.tagId}}.png">
+                            </image>
+                            <image s-else class="record-item-img-src" src="{{record.picUrl[0]}}" mode="aspectFill"></image>
+                            </view>
+                            <view class="record-item-text">{{record.recordTitle}}</view>
+                            <block s-if="{{record.picUrl.length > 0}}">
+                                <view class="record-item-image-cnt-block" style="background: #707070;">
+                                    <image class="record-item-multi-image" src="../../images/multi-image.png" mode="widthFix"></image>
+                                    <text class="record-item-multi-image-cnt">{{record.picUrl.length}}</text>
+                                </view>
+                            </block>
+                        </block>
+                    </view>
+                </scroll-view>
+            </view>
+            <view class="blue-card-area" catchtap="showShareDetail" s-if="blueCnts[idx] > 0" data-open-type="2" data-share-idx="{{idx}}">
+                <scroll-view scroll-y="true" class="card-scroll-view-style">
+                    <view s-for="record in share.recordDo" class="record-item">
+                        <block s-if="{{record.recordType == 2}}">
+                            <view class="record-item-img" style="background-color: #49CAC1;">
+                            <image s-if="{{record.picUrl.length == 0}}" style="width: 48rpx;height: 48rpx; transform: scale(0.6);"
+                                src="../../images/tag/{{share.shareDo.tagId}}.png">
+                            </image>
+                            <image s-else class="record-item-img-src" src="{{record.picUrl[0]}}" mode="aspectFill"></image>
+                            </view>
+                            <view class="record-item-text">{{record.recordTitle}}</view>
+                            <block s-if="{{record.picUrl.length > 0}}">
+                                <view class="record-item-image-cnt-block" style="background: #49CAC1;">
+                                    <image class="record-item-multi-image" src="../../images/multi-image.png" mode="widthFix"></image>
+                                    <text class="record-item-multi-image-cnt">{{record.picUrl.length}}</text>
+                                </view>
+                            </block>
+                        </block>
+                    </view>
+            </view>
+            </scroll-view>
+        </view>
+    </view>
+</view>
+<view s-else class="empty-share-list">
+<text class="empty-share-text">还什么都没有哦，点击右下角分享你的榜单吧～</text>
+</view>
+
+<view s-if="{{showDetail}}" class="detail-view" bindtap="hideDetail">
+    <swiper class="detail-card-area" indicator-dots="true" autoplay="false" current-item-id="{{detailCurrentType}}">
+        <block s-for="share, idx in detailShareList">
+            <swiper-item s-if="{{share.length > 0}}" class="detail-card-color-{{idx}}" catchtap="insideEvnetHandler" item-id="{{idx}}">
+                <view class="detail-card-color-{{idx}" catchtap="insideEvnetHandler">
+                    <view class="userinfo-global-block detail-userinfo-global">
+                        <view class="detail-userinfo-message">
+                            <image class="userinfo-avatar" src="{{currentDetailShare.userDo.avatar}}">
+                    </image>
+                    <view class="userinfo-block">
+                        <text class="userinfo-nickname">{{currentDetailShare.userDo.nickname}}</text>
+                        <text class="userinfo-time">{{currentDetailShare.shareDo.modifyTime}}</text>
+                    </view>
+                </view>
+                <view class="userinfo-like">
+                    <view class="detail-button-box button-box-mixture">
+                        <smt-like is-liked="{{shareList[currentDetailIdx].like}}" class="custom-class-mixture" mode="mixture"
+                            likeNum="{{shareList[currentDetailIdx].shareDo.likeCnt}}" bind:fail="failLike"
+                            bind:error="nologinError" data-idx="{{currentDetailIdx}}" animation-type="2">
+                        </smt-like>
+                        <smt-like is-liked="{{shareList[currentDetailIdx].collect}}" class="custom-class-mixture"
+                            likeNum="{{shareList[currentDetailIdx].shareDo.collectCnt}}" mode="mixture"
+                            icon-type="heart" like-text="收藏" bind:fail="failCollect" bind:error="nologinError"
+                            data-idx="{{currentDetailIdx}}" animation-type="2">
+                        </smt-like>
+                        <view class="card-share-style">
+                            <image src="../../images/share.png" class="card-share-image" bindtap="shareRecord"
+                                data-idx="{{currentDetailIdx}}"></image>
+                        </view>
+                    </view>
+                </view>
+</view>
+<scroll-view scroll-y="true" scroll-top="{= scrolltop =}" style="height: 836rpx;">
+    <view s-for="record,ridx in share">
+        <view class="record-item">
+            <view class="record-item-img" style="background-color: {{detailBackgrounColor[idx]}}; border-radius:50%;">
+                <image style="width: 48rpx;height: 48rpx; transform: scale(0.6);"
+                    src="../../images/tag/{{currentDetailShare.shareDo.tagId}}.png">
+                </image>
+            </view>
+            <view class="detail-record-item-text">{{record.recordTitle}}</view>
+        </view>
+        <view class="detail-record-item-subtitle">{{record.recordText}}</view>
+        <view class="record-item-img-list" s-if="{{record.picUrl.length > 0}}">
+            <image class="image-items" s-for="picUrl in record.picUrl" src="{{picUrl}}" data-idx="{{ridx}}" mode="widthFix"
+                bindtap="previewImg"></image>
+        </view>
+    </view>
+</scroll-view>
+</view>
+</swiper-item>
+</block>
+</swiper>
+</view>
+
+<view bindtap="addShare" class="add-icon" catchtouchmove="buttonMove"
+    catchtouchstart="buttonStart"
+    style="bottom: {{bottomDis}}px;right: {{rightDis}}px;">
+    <image class="publish-add-icon" src="../../images/publish.png"></image>
+</view>
+
+<view class="tag-choose-global-block extend-tag-board" style="display: {{tagExpand ? '' : 'none'}}"
+    bind:tap="showExpand">
+    <view class="tag-choose-board" catch:tap="preventCloseExpand">
+        <block s-for="tag,idx in tags">
+        <block s-if="{{idx != 0}}">
+            <view class="extend-tag-btn-style {{(currentTag == tag.tagId ? 'on' : '')}}" data-current="{{tag.tagId}}"
+                bindtap="switchTag">{{tag.tagName}}</view>
+        </block>
+        </block>
+    </view>
+</view>
+</view>

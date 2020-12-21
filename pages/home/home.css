@@ -1,0 +1,499 @@
+page {
+    height: 100%;
+}
+
+.movable-area{
+    width: 100%;
+    height: 100%;
+}
+
+.top-block {
+    height: 194rpx;
+}
+
+.top-border-line-0 {
+    border-style: solid;
+    border-width: 0 0 1rpx 0;
+    border-color: #F5ECEC;
+    opacity: 1;
+}
+
+.top-border-line-1 {
+    border-style: solid;
+    border-width: 0 0 1rpx 0;
+    border-color: rgba(180, 180, 180, 0.2);
+    opacity: 1;
+}
+
+.top-border-line-2 {
+    border-style: solid;
+    border-width: 0 0 1rpx 0;
+    border-color: rgba(169, 235, 231, 0.2);
+    opacity: 1;
+}
+
+.background-0 {
+    background-color: #FAF5F5;
+}
+
+.background-1 {
+    background-color: #F5F5F5;
+}
+
+.background-2 {
+    background-color: #F6FDFB;
+}
+
+.wrap-global-block {
+    /* padding-top: 16rpx; */
+    position: absolute;
+    top: 185rpx;
+    margin-top: 16rpx;
+    width: 100%;
+}
+
+.scroll-view-style {
+    width: 86%;
+    height: 104.1rpx;
+    white-space: nowrap;
+    padding-left: 16rpx;
+}
+
+.tag-btn-style {
+    margin: 23rpx 28rpx 16rpx 0;
+    padding: 7rpx 8rpx 7rpx 8rpx;
+    display: inline-block;
+    font-size: 28rpx;
+    width: 144rpx;
+    height: 48rpx;
+    border-radius: 50rpx;
+    text-align: center;
+    line-height: 48rpx;
+    background-color: white;
+}
+
+.tag-btn-0 {
+    color: #F55E68;
+}
+
+.tag-btn-1 {
+    color: #707070;
+}
+
+.tag-btn-2 {
+    color: #49CAC1
+}
+
+.on-0 {
+    color: white;
+    background: #F55E68;
+    box-shadow: 0px 3px 8px rgba(243, 84, 106, 0.39);
+    opacity: 1;
+}
+
+.on-1 {
+    color: white;
+    background: #707070;
+    box-shadow: 0px 3px 8px rgba(112, 112, 112, 0.3);
+    opacity: 1;
+}
+
+.on-2 {
+    color: white;
+    background: #49CAC1;
+    box-shadow: 0px 3px 8px rgba(73, 202, 193, 0.4);
+    opacity: 1;
+}
+
+.gray-card-area {
+    overflow: hidden;
+    margin: 0rpx 15rpx 16rpx 15rpx;
+    border-radius: 20rpx;
+    background: white;
+    width: 720rpx;
+    height: 176rpx;
+
+    box-shadow: 0rpx 2rpx 15rpx rgba(230, 230, 230, 0.4);
+    opacity: 1;
+    display: flex;
+}
+
+.gray-card-area:first-of-type {
+    margin-top: 8rpx;
+}
+
+.record-info-left-block {
+    display: flex;
+    width: 660rpx;
+    height: 176rpx;
+    /* justify-content: space-between; */
+}
+
+.record-info-rigth-block {
+    display: flex;
+    height: 100%;
+    position: relative;
+    bottom: 16rpx;
+    right: 4rpx;
+    align-items: flex-end;
+}
+
+.recordinfo-global-block {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.image-items {
+    width: 144rpx;
+    height: 144rpx;
+    display: inline-block;
+    border-radius: 20rpx;
+}
+
+.record-info-detail-block {
+    margin: 0;
+    width: 90%;
+}
+
+.record-title {
+    display: block;
+    width: 100%;
+    /* line-height: 48rpx; */
+    font-size: 28rpx;
+    margin: 12rpx 0 4rpx 0;
+
+    font-family: Source Han Sans CN;
+    font-weight: 400;
+    color: #3D3535;
+    opacity: 1;
+}
+
+.record-subtitle {
+    color: #B4B4B4;
+    width: 95%;
+    height: 32rpx;
+    font-size: 24rpx;
+    /* line-height: 41rpx; */
+    margin-bottom: 16rpx;
+    font-family: Source Han Sans CN;
+    font-weight: 400;
+
+    display:-webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.record-subtitle-time {
+    display: block;
+    color: #B4B4B4;
+    width: 100%;
+    font-size: 24rpx;
+    font-family: Source Han Sans CN;
+    font-weight: 300;
+    /* line-height: 48rpx; */
+    margin: 0 0 16rpx 0;
+    opacity: 1;
+}
+
+.record-rate-block {
+    height: 23rpx;
+    margin: 0 0 4rpx 0;
+}
+
+.ext-smt-star-wrap {
+    margin-right: 16rpx;
+    margin-bottom: 0 !important;
+    width: 24rpx;
+    height: 23rpx;
+    opacity: 1;
+}
+
+.record-image-block {
+    margin: 16rpx 16rpx 16rpx 17rpx;
+}
+
+.sort-line {
+    display: flex;
+    height: 56rpx;
+    line-height: 24rpx;
+    justify-content: space-between;
+    /* padding: 12rpx 0 12rpx 31rpx; */
+}
+
+.sort-text-style {
+    font-size: 24rpx;
+    font-family: Source Han Sans CN;
+    font-weight: 400;
+    color: #B4B4B4;
+    opacity: 1;
+    margin: 16rpx 0 16rpx 31rpx;
+}
+
+.sort-icon-view {
+    display:flex;
+    align-items:center;
+    height: 25rpx;
+    width: 32rpx;
+    margin: 16rpx 38rpx 15rpx 0;
+}
+
+.start-item {
+    width: 24rpx;
+    height: 23rpx;
+}
+
+.sort-icon-img {
+    width: 32rpx;
+    height: 25rpx;
+}
+
+.collapse-view-point {
+    width: 12%;
+    padding: 36rpx 46rpx 36rpx 20rpx;
+}
+
+::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    color: transparent;
+}
+
+@-webkit-keyframes fadeIn {
+	0% {
+	    opacity: 0;
+    }
+    20% {
+        opacity: .2;
+    }
+	50%{
+		opacity: .5;
+    }
+	100% {
+		opacity: 1; /*结尾状态 透明度为1*/
+	}
+}
+
+.extend-tag-board {
+    -webkit-animation-name: fadeIn; /*动画名称*/
+	-webkit-animation-duration: 0.2s; /*动画持续时间*/
+	-webkit-animation-iteration-count: 1; /*动画次数*/
+	-webkit-animation-delay: 0s; /*延迟时间*/
+}
+
+.transparnt-view {
+    position: absolute;
+    right: 10%;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, #FAF5F5 100%);
+    z-index: 50;
+    width: 8%;
+    height: 104.1rpx;
+}
+
+.tag-choose-global-block {
+    position: fixed;
+    top: 40px;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    background-color: #333333d1;
+    display: flex;
+    align-items: flex-end;
+    align-content: center;
+    z-index: 100;
+}
+
+.tag-choose-board {
+    position: fixed;
+    top: 40px;
+    height: 411rpx;
+    width: 100%;
+    background: #FFFFFF;
+    opacity: 1;
+}
+
+.extend-tag-btn-style {
+    margin: 32rpx 0 0 22rpx;
+    padding: 7rpx 8rpx 7rpx 8rpx;
+    display: inline-block;
+    font-size: 28rpx;
+    width: 144rpx;
+    height: 48rpx;
+    border-radius: 30rpx;
+    text-align: center;
+    line-height: 48rpx;
+}
+
+.detail-view {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    background-color: #333333d1;
+    display: flex;
+    align-items: flex-end;
+    align-content: center;
+    z-index: 100;
+}
+
+.detail-card-area {
+    overflow: hidden;
+    margin: 0 auto;
+    position: fixed;
+    top: 15%;
+    left: 30rpx;
+    border-radius: 20rpx;
+    background: #FFF;
+    display: block;
+    width: 688rpx;
+    height: 1008rpx;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.detail-top-handler {
+    display: flex;
+    height: 96rpx;
+    border-width: 0 0 1rpx 0;
+    border-color: #E6E6E6;
+    border-style: solid;
+    opacity: 1;
+}
+
+.detail-time-text {
+    display: flex;
+    width: 504rpx;
+    font-size: 24rpx;
+    font-family: Source Han Sans CN;
+    font-weight: 300;
+    color: #B4B4B4;
+    opacity: 1;
+    margin: 36rpx 0 36rpx 19rpx;
+}
+
+.detail-tools {
+    display: flex;
+    width: 184rpx;
+}
+
+.detail-title {
+    font-size: 32rpx;
+    font-family: Source Han Sans CN;
+    font-weight: 400;
+    color: #3D3535;
+    opacity: 1;
+    margin: 16rpx 0 17rpx 19rpx;
+}
+
+.detail-rate {
+    height: 32rpx;
+    margin: 0 0 16rpx 19rpx;
+}
+
+.detail-text {
+    width: 631rpx;
+    /* height: 172rpx; */
+    font-size: 28rpx;
+    font-family: Source Han Sans CN;
+    font-weight: 400;
+    color: #3D3535;
+    opacity: 1;
+    margin: 16rpx 41rpx 16rpx 19rpx;
+}
+
+.detail-image-item {
+    width: 656rpx;
+    display: inline-block;
+    background: white;
+    margin: 0 16rpx 16rpx 16rpx;
+}
+
+.guide-card-area {
+    overflow: hidden;
+    margin: 0 auto;
+    position: fixed;
+    top: 10%;
+    left: 30rpx;
+    border-radius: 20rpx;
+    background: #FFF;
+    display: block;
+    width: 689rpx;
+    height: 82vh;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.guide-top-block {
+    display: flex;
+    width: 100%;
+    height: 112rpx;
+}
+
+.guide-skip-btn {
+    width: 104rpx;
+    height: 48rpx;
+    background: #FFFFFF;
+    border: 1rpx solid #B4B4B4;
+    opacity: 1;
+    border-radius: 24rpx;
+    text-align: center;
+    position: fixed;
+    top: 32rpx;
+    right: 32rpx;
+}
+
+.guide-skip-btn-text {
+    width: 56rpx;
+    height: 28rpx;
+    font-size: 28rpx;
+    font-family: Source Han Sans CN;
+    font-weight: 300;
+    line-height: 48rpx;
+    color: #B4B4B4;
+    opacity: 1;
+}
+
+.guide-image-obj {
+    width: 100%;
+    height: 100%;
+}
+
+.guide-begin-use-btn {
+    width: 624rpx;
+    height: 98rpx;
+    background: #F55E68;
+    box-shadow: 0rpx 8rpx 15rpx rgba(245, 94, 104, 0.65);
+    border-radius: 20rpx;
+    opacity: 1;
+    margin: 0 0 0 32rpx;
+    text-align: center;
+}
+
+.guide-begin-use-text {
+    font-size: 36rpx;
+    font-family: Source Han Sans CN;
+    font-weight: 400;
+    line-height: 98rpx;
+    color: #FFFFFF;
+    opacity: 1;
+}
+
+.guide-no-show-block {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+    justify-items: center;
+    margin-top: 32rpx;
+}
+
+.guide-no-show-checkbox {
+    font-size: 28rpx;
+    font-family: Source Han Sans CN;
+    font-weight: 400;
+    /* line-height: 48rx; */
+    color: #F55E68;
+    opacity: 1;
+}

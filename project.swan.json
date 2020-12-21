@@ -1,0 +1,26 @@
+{
+    "appid": "22861744",
+    "compilation-args": {
+        "common": {
+            "enhance": true,
+            "ignoreTransJs": false
+        }
+    },
+    "host": "baiduboxapp",
+    "preview": {
+        "packageId": 786757
+    },
+    "projectname": "notebook",
+    "publish": {
+        "version": "1.0.7"
+    },
+    "setting": {
+        "urlCheck": false
+    },
+    "swan": {
+        "baiduboxapp": {
+            "extensionJsVersion": "1.15.3",
+            "swanJsVersion": "3.200.116"
+        }
+    }
+}

@@ -1,0 +1,185 @@
+<view class="wrap {{showDetail ? 'prevent-scroll-style' : ''}}">
+    <view class="mine-top-block"></view>
+    <view class="personal-info-card">
+        <view class="userinfo-global-block-style">
+            <image s-if="{{login}}" class="userinfo-avater-style" src="{{user.avatarUrl}}"></image>
+            <image s-else class="userinfo-avater-style" src="../../images/no-login.png"></image>
+            <view s-if="{{login}}" class="userinfo-block-style">
+                <view class="userinfo-nickname-style">{{user.nickName}}</view>
+                <view class="userinfo-total-publish">已发布&nbsp;&nbsp;<text
+                        style="color: #F3546A;">{{totalPublish}}</text>&nbsp;&nbsp;条记录</view>
+            </view>
+            <button s-else class="userinfo-nickname-btn" hover-class="none" open-type="getUserInfo"
+                bindgetuserinfo="getUserInfo">请点击登录</button>
+        </view>
+        <view class="userinfo-right-block">
+            <view class="new-like-block" s-if="{{newLikeCount > 0}}">
+                <text class="new-like-text">+{{newLikeCount}}}</text>
+            </view>
+            <text class="gotten-like-cnt-text">{{gotLiked}}</text>
+            <text class="gotten-like-desc-text">获赞</text>
+        </view>
+    </view>
+    <view class="personal-global-block" id="center-block">
+        <!-- <view class="small-user-icon" s-if="{{showSticky}}">
+            <view class="center-user-sm-blcok">
+                <image class="small-user-icon-item" src="{{user.avatarUrl}}"></image>
+                <view class="small-user-name-item">{{user.nickName}}</view>
+            </view>
+        </view>
+        <view s-else class="no-contain-sticky"></view> -->
+        <tabs class="tabs-style" active-name="{{currentTab}}" tabs-background-color="#F9F9F9"
+            tabs-active-text-color="#F55E68" tabs-inactive-text-color="#B4B4B4" tabs-underline-color="#F55E68">
+            <tab-item label="分享 {{totalShare}}" name="0" bindtap="swiperNav" data-current="0"></tab-item>
+            <tab-item label="收藏 {{totalCollect}}" name="1" bindtap="swiperNav" data-current="1"></tab-item>
+        </tabs>
+    </view>
+    <view class="mine-empty-shares" s-if="{{shares.length == 0}}">
+        <text class="mine-empty-text">还什么都没有哦，快去社区参与互动吧～</text>
+    </view>
+    <view s-for="share, idx in shares" class="global-card-area">
+        <view class="userinfo-global-block">
+            <view class="userinfo-message">
+                <image class="userinfo-avatar" src="{{share.userDo.avatar}}"></image>
+                <view class="userinfo-block">
+                    <text class="userinfo-nickname">{{share.userDo.nickname}}</text>
+                    <text class="userinfo-time">{{share.shareDo.modifyTime}}</text>
+                </view>
+            </view>
+            <view class="userinfo-like">
+                <view class="button-box button-box-mixture">
+                    <smt-like is-liked="{{share.like}}" class="custom-class-mixture" mode="mixture"
+                        likeNum="{{share.shareDo.likeCnt}}" data-idx="{{idx}}" animation-type="2" bind:fail="failLike">
+                    </smt-like>
+                    <block s-if="{{currentTab == 1}}">
+                    <smt-like is-liked="{{share.collect}}" class="custom-class-mixture"
+                        likeNum="{{share.shareDo.collectCnt}}" mode="mixture" icon-type="heart" like-text="收藏"
+                        bind:fail="failCollect" bind:error="nologinError" data-idx="{{idx}}" animation-type="2">
+                    </smt-like>
+                    </block>
+                    <block s-else>
+                    <smt-icon name="trash" color="#707070" size="36rpx" bindtap="delShare" data-idx="{{idx}}" style="margin: 0 32rpx 0 0"></smt-icon>
+                    </block>
+                    <view class="card-share-style">
+                        <image src="../../images/share.png" class="card-share-image" bindtap="shareRecord"
+                            data-idx="{{idx}}"></image>
+                    </view>
+                </view>
+            </view>
+        </view>
+        <view class="card-area-block">
+        <block s-if="{{redCnts[idx] > 0}}">
+            <view class="red-card-area" catchtap="showShareDetail" data-share-idx="{{idx}}" data-open-type="0">
+                <scroll-view scroll-y="true" class="card-scroll-view-style">
+                    <view s-for="record in share.recordDo" class="record-item">
+                        <block s-if="{{record.recordType == 0}}">
+                            <view class="record-item-img" style="background-color: #F55E68; border-radius:50%;">
+                                <image s-if="{{record.picUrl.length == 0}}" style="width: 48rpx;height: 48rpx; transform: scale(0.6);"
+                                src="../../images/tag/{{share.shareDo.tagId}}.png">
+                            </image>
+                            <image s-else class="record-item-img-src" src="{{record.picUrl[0]}}"></image>
+                            </view>
+                            <view class="record-item-text">{{record.recordTitle}}</view>
+                        </block>
+                    </view>
+                </scroll-view>
+            </view>
+            </block>
+            <block s-if="{{blackCnts[idx] > 0}}">
+            <view class="black-card-area" catchtap="showShareDetail" data-share-idx="{{idx}}" data-open-type="1">
+                <scroll-view scroll-y="true" class="card-scroll-view-style">
+                    <view s-for="record in share.recordDo" class="record-item">
+                        <block s-if="{{record.recordType == 1}}">
+                            <view class="record-item-img" style="background-color: #707070; border-radius:50%;">
+                                <image s-if="{{record.picUrl.length == 0}}" style="width: 48rpx;height: 48rpx; transform: scale(0.6);"
+                                src="../../images/tag/{{share.shareDo.tagId}}.png">
+                            </image>
+                            <image s-else class="record-item-img-src" src="{{record.picUrl[0]}}"></image>
+                            </view>
+                            <view class="record-item-text">{{record.recordTitle}}</view>
+                        </block>
+                    </view>
+                </scroll-view>
+            </view>
+            </block>
+            <block s-if="blueCnts[idx] > 0">
+            <view class="blue-card-area" catchtap="showShareDetail" data-share-idx="{{idx}}" data-open-type="2">
+                <scroll-view scroll-y="true" class="card-scroll-view-style">
+                    <view s-for="record in share.recordDo" class="record-item">
+                        <block s-if="{{record.recordType == 2}}">
+                            <view class="record-item-img" style="background-color: #49CAC1; border-radius:50%;">
+                                <image s-if="{{record.picUrl.length == 0}}" style="width: 48rpx;height: 48rpx; transform: scale(0.6);"
+                                src="../../images/tag/{{share.shareDo.tagId}}.png">
+                                </image>
+                                <image s-else class="record-item-img-src" src="{{record.picUrl[0]}}"></image>
+                            </view>
+                            <view class="record-item-text">{{record.recordTitle}}</view>
+                        </block>
+                    </view>
+            </view>
+            </block>
+            </scroll-view>
+        </view>
+    </view>
+</view>
+
+<view s-if="{{showDetail}}" class="detail-view" bindtap="hideDetail">
+    <swiper class="detail-card-area" indicator-dots="true" autoplay="false" current-item-id="{{detailCurrentType}}">
+        <block s-for="share, idx in detailShareList">
+            <swiper-item s-if="{{share.length > 0}}" class="detail-card-color-{{idx}}" catchtap="insideEvnetHandler" item-id="{{idx}}">
+                <view class="detail-card-color-{{idx}" catchtap="insideEvnetHandler">
+                        <view class="userinfo-global-block detail-userinfo-global">
+                            <view class="detail-userinfo-message">
+                                <image class="userinfo-avatar" src="{{currentDetailShare.userDo.avatar}}">
+                    </image>
+                    <view class="userinfo-block">
+                        <text class="userinfo-nickname">{{currentDetailShare.userDo.nickname}}</text>
+                        <text class="userinfo-time">{{currentDetailShare.shareDo.modifyTime}}</text>
+                    </view>
+                </view>
+                <view class="userinfo-like">
+                    <view class="detail-button-box button-box-mixture">
+                        <smt-like is-liked="{{shares[currentDetailIdx].like}}" class="custom-class-mixture" mode="mixture"
+                            likeNum="{{shares[currentDetailIdx].shareDo.likeCnt}}" bind:fail="failLike"
+                            bind:error="nologinError" data-idx="{{currentDetailIdx}}" animation-type="2">
+                        </smt-like>
+                        <block s-if="{{currentTab == 1}}">
+                        <smt-like is-liked="{{shares[currentDetailIdx].collect}}" class="custom-class-mixture"
+                            likeNum="{{shares[currentDetailIdx].shareDo.collectCnt}}" mode="mixture" icon-type="heart"
+                            like-text="收藏" bind:fail="failCollect" bind:error="nologinError"
+                            data-idx="{{currentDetailIdx}}" animation-type="2">
+                        </smt-like>
+                        </block>
+                        <block s-else>
+                         <smt-icon name="trash" color="#707070" size="36rpx" bindtap="delShare" data-idx="{{currentDetailIdx}}" style="margin: 0 29rpx 0 0"></smt-icon>
+                         </block>
+                        <view class="card-share-style">
+                            <image src="../../images/share.png" class="card-share-image" bindtap="shareRecord"
+                                data-idx="{{idx}}"></image>
+                        </view>
+                    </view>
+                </view>
+</view>
+<scroll-view scroll-y="true" scroll-top="{= scrolltop =}" style="height: 836rpx;">
+    <view s-for="record,ridx in share">
+        <view class="record-item">
+            <view class="record-item-img" style="background-color: {{detailBackgrounColor[idx]}}; border-radius:50%;">
+                <image style="width: 48rpx;height: 48rpx; transform: scale(0.6);"
+                    src="../../images/tag/{{record.tagId}}.png" data-test="{{record}}"></image>
+            </view>
+            <view class="detail-record-item-text">{{record.recordTitle}}</view>
+        </view>
+        <view class="detail-record-item-subtitle">{{record.recordText}}</view>
+        <view class="record-item-img-list" s-if="{{record.picUrl.length > 0}}">
+            <!-- <scroll-view scroll-x="true" scroll-left="{= scrollleft =}" style=" white-space: nowrap; display: flex"> -->
+            <image class="image-items" s-for="picUrl in record.picUrl" src="{{picUrl}}" data-idx="{{ridx}}"
+                mode="widthFix" bindtap="previewImg"></image>
+            <!-- </scroll-view> -->
+        </view>
+    </view>
+</scroll-view>
+</view>
+</swiper-item>
+</block>
+</swiper>
+</view>

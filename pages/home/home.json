@@ -1,0 +1,9 @@
+{
+    "usingComponents": {
+        "smt-icon": "@smt-ui/component/src/icon",
+        "smt-rate": "@smt-ui/component/src/rate",
+        "smt-text-collapse": "@smt-ui/component/src/text-collapse"
+    },
+    "navigationBarTitleText": "红黑记录本",
+    "backgroundColor": "#FAF5F5"
+}

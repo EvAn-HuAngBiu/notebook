@@ -1,0 +1,71 @@
+<view class="wrap">
+    <view class="title-input-view">
+        <input class="title-input" type="text" placeholder="标题·名称" maxlength="15" bind:input="inputTitle" placeholder-class="ext-placeholder-class"/>
+    </view>
+    <view class="text-input-view">
+        <smt-textarea theme="default" placeholder="详细描述理由、原因(最多140字)" contentLimit="140" width="90%" promptType="toast"
+            toastText="最多输入140字" placeholder-style="color: #B4B4B4; font-size: 28rpx;font-weight: 400" textarea-class="ext-textarea-container"
+            textarea-content-class="ext-textarea-content-class"
+            textarea-input-class="ext-textarea-input-class"
+            bind:input="inputText"/>
+        <smt-rate count="5" stars="{{rate}}" bindchange="changeRate" activeColor="#FEE07E" size="16px"
+        activeColor="#FEE07E" sleepColor="#E6E6E6" smt-rate-wrap="ext-smt-rate-wrap" smt-star-wrap="ext-smt-star-wrap" customStar="true">
+            <view slot="active-star">
+                <image class="start-item" src="../../images/publishStart@selected.png"></image>
+            </view>
+            <view slot="sleep-star">
+                <image class="start-item" src="../../images/publishStart.png"></image>
+            </view>
+        </smt-rate>
+        <smt-image-uploader theme="default" pictureLimit="9" pictureSelectLimit="9" pictureList="{{urlLocalList}}"
+            bind:chooseimage="chooseImage"
+            picture-container-class="ext-picture-container-class"
+            picture-item-class="ext-picture-item-class"
+            add-picture-class="ext-picture-item-class" close-class="ext-close-class" />
+    </view>
+    <view class="split-line"></view>
+    <!-- <view class="tab-tag-block"> -->
+    <view>
+        <view class="tab-choose-view">
+            <view s-for="tab in tabs" data-tab-idx="{{tab.name}}" bind:tap="changeTab">
+                <view class="tab-btn-view tab-btn-{{tab.name}} {{currentTab == tab.name ? 'tab-on' : ''}}-{{tab.name}}">
+                    <text>{{tab.label}}</text>
+                </view>
+                <view s-if="{{tab.name == currentTab}}" class="triange-block">
+                    <view class="triangle-up-{{currentTab}}"></view>
+                </view>
+            </view>
+        </view>
+        <view class="tag-choose-view">
+         <scroll-view scroll-x="true" class="scroll-view-style" scroll-into-view="{= scrollIntoView =}" scroll-with-animation="true">
+            <block s-for="tag in tags">
+                <view class="tag-btn-view tag-btn-{{currentTab}} {{currentTag == tag.tagId ? 'tag-on' : ''}}-{{currentTab}}" data-tag-idx="{{tag.tagId}}" bind:tap="changeTag" id="view-{{tag.tagId}}">
+                    <text>{{tag.tagName}}</text>
+                </view>
+            </block>
+        </scroll-view>
+        <view class="transparnt-view"></view>
+        <view class="collapse-view-point" bind:tap="showExpand">
+                <smt-icon name="arrow-down" color="{{arrowColor[currentTab]}}" size="36rpx">
+                </smt-icon>
+        </view>
+        </view>
+    </view>
+    <view class="publish-share-block" bind:tap="shareRecord">
+        <view>
+            <image s-if="{{isShared == 0}}" class="publish-icon-style" src="../../images/social.png"></image>
+            <image s-else class="publish-icon-style" src="../../images/social@selected.png"></image>
+        </view>
+        <view class="publish-share-text" style="color: {{isShared == 0 ? '#B4B4B4' : '#F55E68'}};">同步到社区</view>
+    </view>
+    <view class="add-btn-style" bind:tap="addRecord">添加</view>
+</view>
+
+<view class="tag-choose-global-block extend-tag-board" style="display: {{tagExpand ? '' : 'none'}}" bind:tap="showExpand">
+    <view class="tag-choose-board" catch:tap="preventCloseExpand">
+        <block s-for="tag in tags">
+            <view class="extend-tag-btn-style tag-btn-{{currentTab}} tag-{{(currentTag == tag.tagId ? 'on' : '')}}-{{currentTab}}" data-tag-idx="{{tag.tagId}}" bindtap="changeTag">{{tag.tagName}}</view>
+        </block>
+    </view>
+</view>
+</view>

@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@smt-ui/component": "1.1.83",
+    "@smt-ui/content-component": "^0.3.3"
+  }
+}

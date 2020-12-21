@@ -1,0 +1,96 @@
+<view class="top-fixed top-border-line-{{currentTab}}" style="height: 231rpx">
+    <view class="tab-choose-view">
+        <view s-for="tab in tabs" data-tab-idx="{{tab.name}}" bind:tap="swiperNav">
+            <view class="tab-btn-view tab-btn-{{tab.name}} {{currentTab == tab.name ? 'tab-on' : ''}}-{{tab.name}}">
+                <text>{{tab.label}}</text>
+            </view>
+            <view s-if="{{tab.name == currentTab}}" class="triange-block">
+                <view class="triangle-up-{{currentTab}}"></view>
+            </view>
+        </view>
+    </view>
+    <view class="tag-choose-view">
+        <scroll-view scroll-x="true" class="scroll-view-style" scroll-into-view="{= scrollIntoView =}" scroll-with-animation="true">
+            <block s-for="tag in tags">
+                <view
+                    class="tag-btn-view tag-btn-{{currentTab}} {{currentTag == tag.tagId ? 'tag-on' : ''}}-{{currentTab}}" id="{{'view-' + tag.tagId}}" data-tag-idx="{{tag.tagId}}" bind:tap="switchTag">
+                    <text>{{tag.tagName}}</text>
+                </view>
+            </block>
+        </scroll-view>
+        <view class="transparnt-view" s-if="{{tagBarBackground != '#ffffff'}}"></view>
+        <view class="collapse-view-point" bind:tap="showExpand">
+            <smt-icon name="arrow-down" color="{{arrowColor[currentTab]}}" size="36rpx"></smt-icon>
+        </view>
+    </view>
+</view>
+
+<view class="wrap wrap-global-block share-empty-choose" s-if="{{records.length == 0}}">
+    <text s-if="{{totalChooseCnt == 0}}" class="share-empty-text">还没有记录可以分享哦，点击下方开始添加吧～</text>
+    <text s-else class="share-empty-text">此分类下还没有记录可以分享哦，快去添加吧～</text>
+</view>
+
+<view s-else class="wrap wrap-global-block">
+<scroll-view scroll-y="true" style="height: 100%;">
+    <block s-for="record, idx in records">
+        <!-- <block s-if="{{record.recordType == currentTab && record.tagId == currentTag}}"> -->
+            <view class="gray-card-area {{recordChooseStatus[record.recordId] ? 'check-on' : ''}}-{{currentTab}}">
+                <view class="recordinfo-global-block" data-idx="{{idx}}">
+                    <view class="record-info-left-block" data-idx="{{idx}}">
+                        <view class="image-items record-image-block" style="background: {{arrowColor[currentTab]}};">
+                            <image s-if="{{record.picUrl.length == 0}}" class="image-items" style="transform: scale(0.6);"
+                                src="../../images/tag/{{currentTag}}.png">
+                            </image>
+                            <image s-else class="image-items" src="{{record.picUrl[0]}}" data-idx="{{idx}}"
+                                bindtap="previewImg">
+                            </image>
+                        </view>
+                        <view class="record-info-detail-block">
+                            <view class="record-title">{{record.recordTitle}}</view>
+                            <view class="record-rate-block">
+                                <smt-rate count="{{record.recordRate}}" stars="{{record.recordRate}}" starSize="16px"
+                                    disabled="true" smt-rate-wrap="ext-smt-rate-wrap" smt-star-wrap="ext-smt-star-wrap"
+                                    customStar="true">
+                                    <view slot="active-star">
+                                        <image class="start-item" src="../../images/homepageStar@selected.png"></image>
+                                    </view>
+                                </smt-rate>
+                            </view>
+                            <view class="record-subtitle">{{record.recordText}}</view>
+                            <view class="record-subtitle-time">{{record.modifyTime}}</view>
+                        </view>
+                    </view>
+                    <view class="record-info-rigth-block">
+                        <checkbox-group bindchange="checkChange" data-idx="{{record.recordId}}">
+                            <checkbox value="{{record.recordId}}" color="{{arrowColor[currentTab]}}" checked="{{recordChooseStatus[record.recordId]}}"/>
+                        </checkbox-group>
+                    </view>
+                </view>
+            </view>
+        <!-- </block> -->
+    </block>
+</scroll-view>
+<view class="scroll-transparent-bar"></view>
+</view>
+
+<view s-if="{{records.length == 0 && totalChooseCnt == 0}}">
+    <view class="share-btn-style" bind:tap="navigateToAdd">
+        开始添加
+    </view>
+</view>
+<view s-else class="bottom-handle-block">
+    <view class="total-choose-text">
+        共计&nbsp;&nbsp;<text class="total-number-text">{{totalChooseCnt}}</text>&nbsp;&nbsp;条
+    </view>
+    <view class="share-btn-style" bind:tap="submitShare">
+        发布
+    </view>
+</view>
+
+<view class="tag-choose-global-block extend-tag-board" style="display: {{tagExpand ? '' : 'none'}}" bind:tap="showExpand">
+    <view class="tag-choose-board" catch:tap="preventCloseExpand">
+        <block s-for="tag in tags">
+            <view class="extend-tag-btn-style tag-btn-{{currentTab}} tag-{{(currentTag == tag.tagId ? 'on' : '')}}-{{currentTab}}" data-tag-idx="{{tag.tagId}}" bindtap="switchTag">{{tag.tagName}}</view>
+        </block>
+    </view>
+</view>

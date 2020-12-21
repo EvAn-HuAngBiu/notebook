@@ -1,0 +1,171 @@
+<tabs class="top-fixed" active-name="{{currentTab}}" bindtabchange="tabsOne" tabs-underline-color="#F55E68"
+    tabs-active-text-color="#F55E68">
+    <tab-item s-for="tab in tabs" name="{{tab.name}}" label="{{tab.label}}" bindtap="swiperNav" data-current="{{tab.name}}"></tab-item>
+</tabs>
+<view style="top:40px; height:104.1rpx" class="top-fixed top-border-line-{{currentTab}}">
+    <view style="display: flex;background-color: {{tagBarBackground}}; height:104.1rpx">
+        <scroll-view scroll-x="true" scroll-into-view="{= scrollIntoView =}" class="scroll-view-style"
+            scroll-with-animation="true" style="background-color:{{tagBarBackground}}">
+            <block s-for="tag in tags">
+                <view class="tag-btn-style tag-btn-{{currentTab}} {{(currentTag == tag.tagId ? 'on' : '')}}-{{currentTab}}" data-current="{{tag.tagId}}" bindtap="switchTag" id="{{'view-' + tag.tagId}}">{{tag.tagName}}
+                    </view>
+            </block>
+        </scroll-view>
+        <view class="transparnt-view" style="background: {{gradientTabBackground[currentTab]}}" s-if="{{tagBarBackground != '#ffffff'}}"></view>
+        <view class="collapse-view-point" bind:tap="showExpand">
+            <smt-icon name="arrow-down" s-if="{{tagExpand === false}}" color="{{arrowColor[currentTab]}}" size="36rpx">
+            </smt-icon>
+            <smt-icon name="arrow-up" s-else color="{{arrowColor[currentTab]}}" size="36rpx">
+            </smt-icon>
+        </view>
+    </view>
+</view>
+
+<view s-if="{{login && records.length > 0}}" class="wrap wrap-global-block background-{{currentTab}}">
+    <view class="sort-line">
+        <text class="sort-text-style">{{sortLabel[currentSort].name}}</text>
+        <view class="sort-icon-view" bind:tap="sortRecord">
+            <image class="sort-icon-img" src="../../images/desc.png" s-if="{{currentSort % 2 == 0}}"></image>
+            <image class="sort-icon-img" src="../../images/asc.png" s-else></image>
+        </view>
+    </view>
+    <block s-for="record, idx in records">
+        <block s-if="{{record.recordType == currentTab}}">
+            <view class="gray-card-area">
+                <view class="recordinfo-global-block" bindlongpress="deleteRecord" data-idx="{{idx}}">
+                    <view class="record-info-left-block" bind:tap="showDetail" data-idx="{{idx}}">
+                        <view class="record-image-block">
+                        <view class="image-items" s-if="{{record.picUrl.length == 0}}" style="background: {{arrowColor[currentTab]}};">
+                            <image class="image-items" style="transform: scale(0.6);" src="../../images/tag/{{record.tagId}}.png">
+                            </image>
+                        </view>
+                            <image s-else class="image-items" src="{{record.picUrl[0]}}" data-idx="{{idx}}" mode="aspectFill"
+                                bindtap="previewImg">
+                            </image>
+                        </view>
+                        <view class="record-info-detail-block">
+                            <view class="record-title">{{record.recordTitle}}</view>
+                            <view class="record-rate-block">
+                                <smt-rate count="{{record.recordRate}}" stars="{{record.recordRate}}" starSize="16px"
+                                    disabled="true" smt-rate-wrap="ext-smt-rate-wrap" smt-star-wrap="ext-smt-star-wrap"
+                                    customStar="true">
+                                    <view slot="active-star">
+                                        <image class="start-item" src="../../images/homepageStar@selected.png"></image>
+                                    </view>
+                                </smt-rate>
+                            </view>
+                            <view class="record-subtitle">{{record.recordText}}</view>
+                            <!-- <smt-text-collapse text="{{record.recordText}}" line="2" text-content-class="record-subtitle"></smt-text-collapse> -->
+                            <view class="record-subtitle-time">{{record.modifyTime}}</view>
+                        </view>
+                    </view>
+                    <view class="record-info-rigth-block">
+                        <smt-icon name="comment-editor" color="#F55E68" size="22px" bindtap="editRecord"
+                            data-idx="{{idx}}"></smt-icon>
+                        <!-- <smt-icon name="delete" color="gray" size="18px" style="margin: 1rem 0 0 .35rem"
+                            bindtap="deleteRecord" data-idx="{{idx}}"></smt-icon> -->
+                    </view>
+                </view>
+            </view>
+        </block>
+    </block>
+</view>
+<view s-else class="wrap wrap-global-block" style="height: 60vh;">
+    <image src="../../images/empty-{{currentTab}}.png" style="width:750rpx;" mode="widthFix" catchtap="preventTapEvent"></image>
+</view>
+
+<view bindtap="addRecord" class="add-icon"
+    catchtouchmove="buttonMove" catchtouchstart="buttonStart"
+    style="bottom: {{bottomDis}}px;right: {{rightDis}}px;">
+    <image src="../../images/add.png" mode="widthFix"></image>
+</view>
+
+<view class="tag-choose-global-block extend-tag-board" style="display: {{tagExpand ? '' : 'none'}}" bind:tap="showExpand">
+    <view class="tag-choose-board" catch:tap="preventCloseExpand">
+        <block s-for="tag, idx in tags">
+        <block s-if="{{idx != 0}}">
+            <view class="extend-tag-btn-style tag-btn-{{currentTab}} {{(currentTag == tag.tagId ? 'on' : '')}}-{{currentTab}}" data-current="{{tag.tagId}}" bindtap="switchTag">{{tag.tagName}}</view>
+        </block>
+        </block>
+    </view>
+</view>
+</view>
+
+<view s-if="{{showDetail}}" class="detail-view" bindtap="hideDetail">
+    <view class="detail-card-area" catch:tap="preventTapEvent">
+        <view class="detail-top-handler">
+            <text class="detail-time-text">{{records[currentDetailRecord].modifyTime}}</text>
+            <view class="detail-tools">
+                <smt-icon name="comment-editor" color="#F55E68" size="42rpx" bindtap="editRecord" data-idx="{{currentDetailRecord}}" style="margin: 28rpx 48rpx 28rpx 0"></smt-icon>
+                <smt-icon name="trash" color="#F55E68" size="42rpx" bindtap="deleteRecord" data-idx="{{currentDetailRecord}}" style="margin: 28rpx 0 28rpx 0"></smt-icon>
+            </view>
+        </view>
+        <scroll-view scroll-y="true" scroll-top="{= scrolltop =}" style="height: 910rpx;">
+        <view class="detail-title">{{records[currentDetailRecord].recordTitle}}</view>
+        <view class="detail-rate">
+            <smt-rate count="{{records[currentDetailRecord].recordRate}}" stars="{{records[currentDetailRecord].recordRate}}" starSize="16px" disabled="true" smt-rate-wrap="ext-smt-rate-wrap"   smt-star-wrap="ext-smt-star-wrap" customStar="true">
+            <view slot="active-star">
+                <image class="start-item" src="../../images/homepageStar@selected.png"></image>
+            </view>
+        </smt-rate>
+        </view>
+        <view class="detail-text">
+            {{records[currentDetailRecord].recordText}}
+        </view>
+        <view>
+            <image class="detail-image-item" s-for="picUrl,idx in records[currentDetailRecord].picUrl" src="{{picUrl}}" data-idx="{{idx}}" bindtap="previewImg" mode="widthFix"></image>
+        </view>
+        </scroll-view>
+    </view>
+</view>
+
+<view s-if="{{showGuide}}" class="detail-view" catchtap="true">
+<swiper class="guide-card-area" indicator-dots="true" autoplay="false" indicator-color="#B4B4B4" indicator-active-color="#F55E68">
+    <swiper-item>
+        <view class="guide-top-block">
+            <view class="guide-skip-btn" bindtap="skipGuide">
+                <text class="guide-skip-btn-text">跳过</text>
+            </view>
+        </view>
+        <view style="height: 80%">
+            <image class="guide-image-obj" src="../../images/guide-1.png" mode="aspectFit"></image>
+        </view>
+    </swiper-item>
+    <swiper-item>
+        <view class="guide-top-block">
+            <view class="guide-skip-btn" bindtap="skipGuide">
+                <text class="guide-skip-btn-text">跳过</text>
+            </view>
+        </view>
+        <view style="height: 80%">
+            <image class="guide-image-obj" src="../../images/guide-2.png" mode="aspectFit"></image>
+        </view>
+    </swiper-item>
+    <swiper-item>
+        <view class="guide-top-block">
+            <view class="guide-skip-btn" bindtap="skipGuide">
+                <text class="guide-skip-btn-text">跳过</text>
+            </view>
+        </view>
+        <view style="height: 80%">
+            <image class="guide-image-obj" src="../../images/guide-3.png" mode="aspectFit"></image>
+        </view>
+    </swiper-item>
+    <swiper-item>
+        <view class="guide-top-block">
+            <view class="guide-skip-btn" bindtap="skipGuide">
+                <text class="guide-skip-btn-text">跳过</text>
+            </view>
+        </view>
+        <image style="width:100%; margin-top: 7vh" src="../../images/guide-4.png" mode="aspectFit"></image>
+        <view class="guide-begin-use-btn" bindtap="guideBeginUse">
+            <text class="guide-begin-use-text">开始使用</text>
+        </view>
+        <checkbox-group  bindchange="changeSkipCheckbox">
+        <checkbox class="guide-no-show-block" color="#F55E68" checked>
+            <text class="guide-no-show-checkbox">不再提醒</text>
+        </checkbox>
+        </checkbox-group>
+    </swiper-item>
+</swiper>
+</view>

@@ -1,0 +1,8 @@
+{
+    "backgroundColor": "#F9F9F9",
+    "navigationBarTitleText": "社区发布",
+    "usingComponents": {
+        "smt-icon": "@smt-ui/component/src/icon",
+        "smt-rate": "@smt-ui/component/src/rate"
+    }
+}

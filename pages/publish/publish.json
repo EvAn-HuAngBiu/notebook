@@ -1,0 +1,9 @@
+{
+    "navigationBarTitleText": "添加",
+    "usingComponents": {
+        "smt-textarea": "@smt-ui/component/src/textarea",
+        "smt-rate": "@smt-ui/component/src/rate",
+        "smt-image-uploader": "@smt-ui/component/src/image-uploader",
+        "smt-icon": "@smt-ui/component/src/icon"
+    }
+}

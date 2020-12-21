@@ -1,0 +1,9 @@
+<!-- index.swan -->
+<view class="container">
+    <view class="logo">
+    </view>
+    <view class="userinfo">
+    <button class="userinfo-login-btn" bindtap="testShare">分享跳转</button>
+    <view>{{msg}}</view>
+    </view>
+</view>

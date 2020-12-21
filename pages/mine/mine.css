@@ -1,0 +1,522 @@
+.mine-top-block {
+    width: 100%;
+    height: 224rpx;
+    background: linear-gradient(180deg, #F55E68 0%, #F58A91 100%);
+    /* background: #F55E68; */
+    opacity: 1;
+}
+
+.personal-info-card {
+    display: flex;
+    position: absolute;
+    top: 112rpx;
+    left: 16rpx;
+    right: 14rpx;
+    height: 176rpx;
+    width: 720rpx;
+    border-radius: 20rpx;
+    background: #FFFFFF url('../../images/transparent-background.png') no-repeat center;
+    box-shadow: 0rpx 3rpx 21rpx rgba(0, 0, 0, 0.06);
+    z-index: 5;
+}
+
+.personal-global-block {
+    /* display: flex; */
+    height: 100%;
+    z-index: 6;
+    position: sticky;
+    top: 0;
+}
+
+.userinfo-global-block-style {
+    display: flex;
+    height: 176rpx;
+    width: 528rpx;
+    /* justify-content: space-between; */
+}
+
+.userinfo-global-block-style::after {
+    content: "";
+    width: 1rpx;
+    height: 56rpx;
+    background: #B4B4B4;
+    position: absolute;
+    top: 60rpx;
+    left: 528rpx;
+}
+
+.userinfo-avater-style {
+    margin: 32rpx 32rpx 16rpx 32rpx;
+    border-radius: 50%;
+    width: 120rpx;
+    height: 120rpx;
+}
+
+.userinfo-block-style {
+    margin: 0;
+    height: 100%;
+}
+
+.userinfo-nickname-style {
+    font-size: 32rpx;
+    font-family: Source Han Sans CN;
+    font-weight: 400;
+    line-height: 54rpx;
+    color: #3D3535;
+    opacity: 1;
+    margin: 36rpx 0 12rpx 0;
+    display: flex;
+}
+
+.userinfo-total-publish {
+    font-size: 24rpx;
+    font-family: Source Han Sans CN;
+    font-weight: 400;
+    line-height: 41rpx;
+    color: #B4B4B4;
+    opacity: 1;
+}
+
+.userinfo-nickname-btn {
+    font-size: 32rpx;
+    font-family: Source Han Sans CN;
+    font-weight: 400;
+    line-height: 54rpx;
+    opacity: 1;
+    margin: 56rpx 0 56rpx 0;
+    background: none;
+}
+
+button::after {
+    border: none;
+}
+
+.userinfo-right-block {
+    /* display: flex; */
+    height: 100%;
+    width: 192rpx;
+}
+
+.gotten-like-cnt-text {
+    display: block;
+    font-size: 32rpx;
+    font-family: Source Han Sans CN;
+    font-weight: 400;
+    line-height: 54rpx;
+    color: #F55E68;
+    opacity: 1;
+    margin-top: 48rpx;
+    margin-bottom: 23rpx;
+    text-align: center;
+    width: 192rpx;
+    height: 32rpx;
+}
+
+.gotten-like-desc-text {
+    display: block;
+    font-size: 24rpx;
+    font-family: Source Han Sans CN;
+    font-weight: 400;
+    line-height: 41rpx;
+    color: #B4B4B4;
+    opacity: 1;
+    height: 24rpx;
+    display: block;
+    margin: 0 75rpx 49rpx 69rpx;
+}
+
+.global-card-area {
+    overflow: hidden;
+    margin-top: 20rpx;
+    background: white;
+    width: 720rpx;
+    margin-left: 15rpx;
+    box-shadow: 0rpx 3rpx 20rpx rgba(0, 0, 0, 0.06);
+    border-radius: 20rpx;
+}
+
+.card-area-block {
+    margin-top: 8rpx;
+    margin-bottom: 32rpx;
+    background-color: white;
+}
+
+.red-card-area {
+    overflow: hidden;
+    margin: 0 14rpx 16rpx 16rpx;
+    width: 690rpx;
+    height: 176rpx;
+
+    background: #F9E7E7;
+    box-shadow: 0rpx 3rpx 10rpx rgba(245, 94, 104, 0.1);
+    opacity: 1;
+    border-radius: 20rpx;
+}
+
+.black-card-area {
+    overflow: hidden;
+    margin: 0 14rpx 16rpx 16rpx;
+    width: 690rpx;
+    height: 176rpx;
+
+    background: #E6E6E6;
+    box-shadow: 0rpx 3rpx 10rpx rgba(112, 112, 112, 0.1);
+    opacity: 1;
+    border-radius: 20rpx;
+}
+
+.blue-card-area {
+    overflow: hidden;
+    margin: 0 14rpx 16rpx 16rpx;
+    width: 690rpx;
+    height: 176rpx;
+
+    background: #E7F8F3;
+    box-shadow: 0rpx 3rpx 10rpx rgba(73, 202, 193, 0.1);
+    opacity: 1;
+    border-radius: 20rpx;
+}
+
+.card-scroll-view-style {
+    height: 176rpx;
+}
+
+.record-item {
+    display: flex;
+    width: 100%;
+}
+
+/* .record-item:first-of-type > .record-item-img {
+    margin-top: 16rpx;
+} */
+
+/* .record-item:first-of-type > .record-item-text {
+    margin-top: 26rpx;
+} */
+
+.record-item-subtitle {
+    display: flex;
+    width: 95%;
+    color: #808080;
+    margin-left: 30rpx;
+    margin-bottom: 15rpx;
+    /* margin-right: 30rpx; */
+    /* white-space: pre-wrap; */
+}
+
+.record-item-img {
+    display: flex;
+    margin: 16rpx 16rpx 0 16rpx;
+    border-radius: 50%;
+    width: 48rpx;
+    height: 48rpx;
+    align-items: center;
+    justify-content: center;
+    opacity: 1;
+}
+
+.record-item-img-src {
+    width: 48rpx;
+    height: 48rpx;
+    border-radius: 100%;
+}
+
+.record-item-text {
+    display: flex;
+    margin-top: 26rpx;
+    align-items: center;
+    justify-content: center;
+
+    height: 28rpx;
+    font-size: 28rpx;
+    font-family: Source Han Sans CN;
+    font-weight: 400;
+    line-height: 28rpx;
+    color: #3D3535;
+    opacity: 1;
+}
+
+.userinfo-message {
+    display: flex;
+    /* justify-content: space-between; */
+    align-items: center;
+    width: 60%;
+}
+
+.userinfo-avatar {
+    margin: 32rpx 16rpx 16rpx 16rpx;
+    border-radius: 50%;
+    width: 80rpx;
+    height: 80rpx;
+}
+
+.userinfo-nickname {
+    display: block;
+    color: #3D3535;
+    width: 300rpx;
+    height: 24rpx;
+    font-size: 24rpx;
+    font-family: Source Han Sans CN;
+    font-weight: 400;
+    margin: 40rpx 0 16rpx 0;
+}
+
+.userinfo-time {
+    display: block;
+    color: #B4B4B4;
+    width: 150rpx;
+    height: 20rpx;
+    font-size: 20rpx;
+    font-family: Source Han Sans CN;
+    font-weight: 400;
+    opacity: 1;
+}
+
+.userinfo-block {
+    margin: 0;
+    height: 100%;
+}
+
+.userinfo-global-block {
+    display: flex;
+    height: 126rpx;
+    /* justify-content: space-between; */
+}
+
+.userinfo-like {
+    display: flex;
+    justify-content: flex-end;
+    width: 40%;
+}
+
+.button-box {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    padding-right: 28rpx;
+}
+
+.custom-class-mixture {
+    margin-right: 29rpx;
+}
+
+.card-share-image {
+    width: 32rpx;
+    height: 32rpx;
+}
+
+.small-user-icon {
+    width: 100%;
+    height: 96rpx;
+    background: linear-gradient(180deg, #F55E68 0%, #F58A91 100%);
+}
+
+.center-user-sm-blcok {
+    margin-left:208rpx;
+    height: 100%;
+    display: flex;
+}
+
+.small-user-icon-item {
+    margin: 32rpx 16rpx 16rpx 32rpx;
+    border-radius: 50%;
+    width: 48rpx;
+    height: 48rpx;
+}
+
+.small-user-name-item {
+    font-size: 32rpx;
+    font-family: Source Han Sans CN;
+    font-weight: 400;
+    color: #FFFFFF;
+    opacity: 1;
+    text-align: center;
+    margin-top: 32rpx;
+}
+
+.no-contain-sticky {
+    height: 96rpx;
+}
+
+.detail-view {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    background-color: #333333d1;
+    display: flex;
+    align-items: flex-end;
+    align-content: center;
+    z-index: 100;
+}
+
+.detail-card-area {
+    overflow: hidden;
+    margin: 0 auto;
+    position: fixed;
+    top: 15%;
+    left: 30rpx;
+    border-radius: 20rpx;
+    background: #FFF;
+    display: block;
+    width: 689rpx;
+    height: 1008rpx;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.detail-userinfo-global {
+    width: 100%;
+    display: flex;
+}
+
+.detail-userinfo-message {
+    display: flex;
+    /* justify-content: flex-start; */
+    align-items: center;
+    width: 60%;
+}
+
+.detail-swiper {
+    height: 100%;
+    border-radius: 8px 8px 0 0;
+}
+
+.detail-card-color-0 {
+    background: #F9E7E7;
+}
+
+.detail-card-color-1 {
+    background: #E6E6E6;
+}
+
+.detail-card-color-2 {
+    background: #E7F8F3;
+}
+
+.detail-button-box {
+    display: flex;
+    justify-items: flex-end;
+    height: 100%;
+    align-items: center;
+    padding-right: 32rpx;
+}
+
+.detail-record-item-img {
+    display: flex;
+    margin: 16rpx 16rpx 16rpx 17rpx;
+    border-radius: 50%;
+    width: 48rpx;
+    height: 48rpx;
+    align-items: center;
+    justify-content: center;
+    opacity: 1;
+}
+
+.detail-record-item-text {
+    display: flex;
+    margin-top: 26rpx;
+    align-items: center;
+    justify-content: center;
+
+    height: 28rpx;
+    font-size: 28rpx;
+    font-family: Source Han Sans CN;
+    font-weight: 400;
+    line-height: 48rpx;
+    color: #3D3535;
+    opacity: 1;
+}
+
+.detail-record-item-subtitle {
+    display: flex;
+    width: 95%;
+    margin: 0 0 16rpx 17rpx;
+    font-size: 24rpx;
+    font-family: Source Han Sans CN;
+    font-weight: 400;
+    line-height: 41rpx;
+    color: #707070;
+    opacity: 1;
+}
+
+.image-items {
+    width: 656rpx;
+    /* height: 304rpx; */
+    margin: 0 16rpx 8rpx 17rpx;
+    display: inline-block;
+    background: white;
+}
+
+@-webkit-keyframes fadeIn {
+	0% {
+	    opacity: 0;
+    }
+    20% {
+        opacity: .2;
+    }
+	50%{
+		opacity: .5;
+    }
+	100% {
+		opacity: 1;
+	}
+}
+
+.pull-down-user-icon {
+    -webkit-animation-name: fadeIn;
+	-webkit-animation-duration: 0.2s;
+	-webkit-animation-iteration-count: 1;
+	-webkit-animation-delay: 0s;
+}
+
+.tabs-style {
+    margin-top: 96rpx;
+}
+
+.new-like-block {
+    position: absolute;
+    right: 43rpx;
+    top: 25rpx;
+
+    width: 39rpx;
+    height: 26rpx;
+    background: #FF2525;
+    opacity: 1;
+    border-radius: 4rpx;
+    text-align: center;
+}
+
+.new-like-text {
+    color: #FFFFFF;
+    font-size: 20rpx;
+    font-family: Source Han Sans CN;
+    font-weight: 400;
+    line-height: 26rpx;
+}
+
+.mine-empty-shares {
+    display: flex;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    height: 60vh;
+}
+
+.mine-empty-text {
+    font-size: 32rpx;
+    font-family: Source Han Sans CN;
+    font-weight: 400;
+    color: #B4B4B4;
+}
+
+.prevent-scroll-style {
+    /* top: 0rpx;
+    left: 0rpx; */
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    position: fixed;
+    z-index: 0;
+}

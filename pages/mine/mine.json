@@ -1,0 +1,13 @@
+{
+    "navigationBarTitleText": "个人中心",
+    "navigationBarBackgroundColor": "#F55E68",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#F9F9F9",
+    "usingComponents": {
+        "smt-textarea": "@smt-ui/component/src/textarea",
+        "smt-rate": "@smt-ui/component/src/rate",
+        "smt-image-uploader": "@smt-ui/component/src/image-uploader",
+        "smt-icon": "@smt-ui/component/src/icon",
+        "smt-like": "@smt-ui/content-component/src/like"
+    }
+}

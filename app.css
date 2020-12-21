@@ -1,0 +1,102 @@
+/* * {
+    box-sizing: border-box;
+    margin: 1;
+    padding: 0;
+} */
+
+/* html,
+body {
+    height: 100%;
+    font-family: -apple-system-font, Helvetica Neue, Helvetica, sans-serif;
+    font-size: 100px;
+    color: #333;
+} */
+
+/**
+ * @file app.css
+ * @author swan
+ */
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 200rpx 0;
+    box-sizing: border-box;
+}
+
+.wrap {
+    padding-bottom: .5rem;
+    font-size: .16rem;
+}
+
+.top-fixed {
+    position:fixed;
+    top:0;
+    width: 750rpx;
+    z-index: 100;
+}
+
+.card-area {
+    overflow: hidden;
+    margin: .17rem .17rem 0 .17rem;
+    border-radius: 8px 8px;
+    background: #FFF;
+}
+
+.tag-inline {
+    display: flex;
+}
+
+.description {
+    height: .46rem;
+    padding-left: .17rem;
+    line-height: .46rem;
+}
+
+.top-description {
+    display: flex;
+    padding: .16rem .17rem;
+    font-family: PingFangSC-Medium;
+    justify-content: space-between;
+    font-size: 1.5rem;
+}
+
+.top-description :first-child {
+    width: 2.93rem;
+    font-size: .15rem;
+}
+
+.top-description :nth-child(2) {
+    width: 2.45rem;
+    font-family: PingFangSC-Regular;
+    font-size: .13rem;
+    text-align: right;
+    color: #999;
+}
+
+.add-icon {
+    position: fixed;
+    width: 116rpx;
+    height: 116rpx;
+    bottom: 28px;
+    right: 28px;
+    background-color: #F55E68;
+    border-radius: 50%;
+    box-shadow: 0rpx 4rpx 15rpx rgba(161, 8, 8, 0.4);
+    display: flex;
+    z-index: 50;
+    align-items: center;
+    justify-content: center;
+    opacity: 1;
+}
+
+.add-icon image {
+    width: 50%;
+    height: 50%;
+}
+
+.no-scroll {
+    height: 100%;
+    overflow: hidden;
+}
