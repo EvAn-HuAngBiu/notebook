@@ -37,6 +37,14 @@ Page({
         rightDis: 28,
         windowHeight: '',
         windowWidth: '',
+        briefCommentList: [{
+            name: '爱吃食物的女孩',
+            content: '真的赞成'
+        }, {
+            name: '大皇子',
+            content: '下次可以试试我做的菜'
+        }],
+        totalCommentCount: 26
     },
     onLoad: function (options) {
         let tags = [].concat(app.globalData.tags);
@@ -436,4 +444,11 @@ Page({
             rightDis: rightDis
         })
     },
+
+    showAllComments: function() {
+        swan.showModal({
+            title: '显示所有评论',
+            content: '评论内容'
+        });
+    }
 });

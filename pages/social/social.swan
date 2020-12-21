@@ -117,10 +117,29 @@
             </view>
             </scroll-view>
         </view>
+        <view class="comment-area-block">
+            <view class="comment-intro-line">
+                <text class="comment-gray-text">评论 {{totalCommentCount}}</text>
+                <view class="show-all-view-block" bindtap="showAllComments">
+                    <text class="comment-gray-text">显示全部</text>
+                    <view class="show-all-arrow-block">
+                        <smt-icon name="arrow-down" color="#B4B4B4" size="28rpx"></smt-icon>
+                    </view>
+                </view>
+            </view>
+            <view class="comment-brief-line">
+                <block s-for="comment in briefCommentList">
+                    <view class="brief-comment-content-line">
+                        <text class="brief-comment-name">{{comment.name}}</text>
+                        <text class="brief-comment-content">{{comment.content}}</text>
+                    </view>
+                </block>
+            </view>
+        </view>
     </view>
 </view>
 <view s-else class="empty-share-list">
-<text class="empty-share-text">还什么都没有哦，点击右下角分享你的榜单吧～</text>
+    <text class="empty-share-text">还什么都没有哦，点击右下角分享你的榜单吧～</text>
 </view>
 
 <view s-if="{{showDetail}}" class="detail-view" bindtap="hideDetail">

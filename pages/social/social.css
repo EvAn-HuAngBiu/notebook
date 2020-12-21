@@ -35,10 +35,6 @@
     line-height: 48rpx;
 }
 
-.tag-btn-style:first-of-type {
-    /* margin-left: 16rpx; */
-}
-
 .on {
     color: white !important;
     background-color:#F55E68 !important;
@@ -363,7 +359,7 @@
 
 .card-area-block {
     margin-top: 8rpx;
-    margin-bottom: 32rpx;
+    /* margin-bottom: 32rpx; */
 }
 
 .card-share-image {
@@ -474,4 +470,54 @@
     overflow: hidden;
     position: fixed;
     z-index: 0;
+}
+
+.comment-area-block {
+    margin: 2rpx 16rpx 14rpx 16rpx;
+}
+
+.comment-intro-line {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.comment-gray-text {
+    font-size: 24rpx;
+    font-family: Source Han Sans CN;
+    font-weight: 400;
+    line-height: 41rpx;
+    color: #B4B4B4;
+    opacity: 1;
+}
+
+.show-all-view-block {
+    display: flex;
+}
+
+.show-all-arrow-block {
+    margin-left: 9rpx;
+    padding: 4rpx 0 5rpx 0;
+}
+
+.brief-comment-content-line {
+    width: 100%;
+}
+
+.brief-comment-name {
+    font-size: 28rpx;
+    font-family: Source Han Sans CN;
+    font-weight: 500;
+    color: #3D3535;
+    opacity: 1;
+}
+
+.brief-comment-content {
+    margin-left: 24rpx;
+    font-size: 28rpx;
+    font-family: Source Han Sans CN;
+    font-weight: 400;
+    line-height: 48rpx;
+    color: #3D3535;
+    opacity: 1;
 }
