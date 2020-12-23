@@ -429,8 +429,9 @@ Page({
 
     previewImg: function (e) {
         var that = this;
-        var shareIdx = e.target.dataset.idx;
-        var urls = that.data.currentDetailShare.recordDo[shareIdx].picUrl;
+        var shareIdx = e.target.dataset.typeIdx;
+        var recordIdx = e.target.dataset.recordIdx;
+        var urls = that.data.detailShareList[shareIdx][recordIdx].picUrl;
         swan.previewImage({
             urls: urls
         })

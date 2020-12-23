@@ -172,8 +172,7 @@
         <view class="detail-record-item-subtitle">{{record.recordText}}</view>
         <view class="record-item-img-list" s-if="{{record.picUrl.length > 0}}">
             <!-- <scroll-view scroll-x="true" scroll-left="{= scrollleft =}" style=" white-space: nowrap; display: flex"> -->
-            <image class="image-items" s-for="picUrl in record.picUrl" src="{{picUrl}}" data-idx="{{ridx}}"
-                mode="widthFix" bindtap="previewImg"></image>
+            <image class="image-items" s-for="picUrl in record.picUrl" src="{{picUrl}}" data-type-idx="{{idx}}" data-record-idx="{{ridx}}" mode="widthFix" bindtap="previewImg"></image>
             <!-- </scroll-view> -->
         </view>
     </view>

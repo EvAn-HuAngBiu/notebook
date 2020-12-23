@@ -37,14 +37,11 @@ Page({
         rightDis: 28,
         windowHeight: '',
         windowWidth: '',
-        briefCommentList: [{
-            name: '爱吃食物的女孩',
-            content: '真的赞成'
-        }, {
-            name: '大皇子',
-            content: '下次可以试试我做的菜'
-        }],
-        totalCommentCount: 26
+        totalCommentCount: 26,
+        currentUserAvatar: '',
+        hasLogin: false,
+        showBriefCommentPublish: false,
+        currentBriefCommentShareId: 0
     },
     onLoad: function (options) {
         let tags = [].concat(app.globalData.tags);
@@ -52,8 +49,10 @@ Page({
             tagId: 0,
             tagName: "所有"
         });
+        let curUser = swan.getStorageSync('userInfo');
         this.setData({
-            tags: tags
+            tags: tags,
+            currentUserAvatar: curUser.avatarUrl
         });
         swan.getSystemInfo({
             success: res => {
@@ -73,8 +72,14 @@ Page({
     onShow: function () {
         var that = this;
         var url = that.data.currentTab === 0 ? api.ShareListNew : api.ShareListHot;
+        let currentUserAvatar = '';
+        if (that.data.currentUserAvatar == '') {
+            currentUserAvatar = swan.getStorageSync('userInfo').avatarUrl;
+        }
         that.setData({
-            curPage: 1
+            curPage: 1,
+            hasLogin: app.globalData.hasLogin,
+            currentUserAvatar: currentUserAvatar
         });
         util.request(url, {
             tagId: that.data.currentTag,
@@ -354,8 +359,9 @@ Page({
 
     previewImg: function (e) {
         var that = this;
-        var shareIdx = e.target.dataset.idx;
-        var urls = that.data.currentDetailShare.recordDo[shareIdx].picUrl;
+        var shareIdx = e.target.dataset.typeIdx;
+        var recordIdx = e.target.dataset.recordIdx;
+        var urls = that.data.detailShareList[shareIdx][recordIdx].picUrl;
         swan.previewImage({
             urls: urls
         })
@@ -445,10 +451,29 @@ Page({
         })
     },
 
-    showAllComments: function() {
-        swan.showModal({
-            title: '显示所有评论',
-            content: '评论内容'
+    showAllComments: function(e) {
+        let shareIdx = e.currentTarget.dataset.shareIdx;
+        swan.navigateTo({
+            url: '/pages/comment-list/comment-list?shareIdx=' + shareIdx
         });
+    },
+
+    hideBriefCommentPublish: function() {
+        var that = this;
+        if (that.data.showBriefCommentPublish === true) {
+            that.setData({
+                showBriefCommentPublish: false,
+            });
+        }
+    },
+
+    focusBriefCommentInput: function(e) {
+        var that = this;
+        if (that.data.showBriefCommentPublish === false) {
+            that.setData({
+                showBriefCommentPublish: true,
+                currentBriefCommentShareId: e.currentTarget.dataset.shareId
+            });
+        }
     }
 });

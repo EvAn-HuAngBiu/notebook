@@ -1,0 +1,9 @@
+{
+    "navigationBarTitleText": "动态详情",
+    "usingComponents": {
+        "smt-like": "@smt-ui/content-component/src/like",
+        "smt-feed": "@smt-ui/component/src/feed",
+        "smt-icon": "@smt-ui/component/src/icon",
+        "smt-gradient-collapse": "@smt-ui/component/src/gradient-collapse"
+    }
+}

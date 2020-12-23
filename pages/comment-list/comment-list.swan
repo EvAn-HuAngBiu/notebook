@@ -1,31 +1,6 @@
-<tabs class="top-fixed" active-name="{{currentTab}}" bindtabchange="tabsOne" tabs-underline-color="#F55E68"
-    tabs-active-text-color="#F55E68">
-    <tab-item s-for="tab in tabs" name="{{tab.name}}" label="{{tab.label}}" bindtap="swiperNav"
-        data-current="{{tab.name}}"></tab-item>
-</tabs>
-<view style="top:40px; height:104.1rpx" class="top-fixed top-border-line">
-    <view style="display: flex;background-color: {{tagBarBackground}}; height:104.1rpx">
-        <scroll-view scroll-x="true" scroll-into-view="{= scrollIntoView =}" class="scroll-view-style"
-            scroll-with-animation="true" style="background-color:{{tagBarBackground}}">
-            <block s-for="tag in tags">
-                <!-- <button size="default" class="tag-btn-style {{currentTag == tag.tagId ? 'on' : ''}}"
-            data-current="{{tag.tagId}}" bindtap="switchTag">{{tag.tagName}}</button> -->
-                <view class="tag-btn-style {{currentTag == tag.tagId ? 'on' : ''}}" data-current="{{tag.tagId}}"
-                    id="{{'view-' + tag.tagId}}" bindtap="switchTag">{{tag.tagName}}</view>
-            </block>
-        </scroll-view>
-        <view class="transparnt-view" s-if="{{tagBarBackground != '#ffffff'}}"></view>
-        <view class="collapse-view-point" bind:tap="showExpand">
-            <smt-icon name="arrow-down" s-if="{{tagExpand === false}}" color="{{arrowColor}}" size="36rpx">
-            </smt-icon>
-            <smt-icon name="arrow-up" s-else color="{{arrowColor}}" size="36rpx">
-            </smt-icon>
-        </view>
-    </view>
-</view>
-
-<view s-if="{{shareList.length != 0}}" class="wrap wrap-global-block" id="wrap-global-id">
-    <view s-for="share, idx in shareList" class="gray-card-area">
+<view class="wrap wrap-global-block">
+    <view id="empty-total-block">
+    <view class="gray-card-area">
         <view class="userinfo-global-block">
             <view class="userinfo-message">
                 <image class="userinfo-avatar" src="{{share.userDo.avatar}}"></image>
@@ -52,7 +27,7 @@
             </view>
         </view>
         <view class="card-area-block">
-            <view class="red-card-area" catchtap="showShareDetail" s-if="{{redCnts[idx] > 0}}" data-open-type="0" data-share-idx="{{idx}}">
+            <view class="red-card-area" catchtap="showShareDetail" s-if="{{redCnt > 0}}" data-open-type="0" data-share-idx="{{idx}}">
                 <scroll-view scroll-y="true" class="card-scroll-view-style">
                     <view s-for="record in share.recordDo" class="record-item">
                         <block s-if="{{record.recordType == 0}}">
@@ -74,7 +49,7 @@
                     </view>
                 </scroll-view>
             </view>
-            <view class="black-card-area" catchtap="showShareDetail" s-if="{{blackCnts[idx] > 0}}" data-open-type="1" data-share-idx="{{idx}}">
+            <view class="black-card-area" catchtap="showShareDetail" s-if="{{blackCnt > 0}}" data-open-type="1" data-share-idx="{{idx}}">
                 <scroll-view scroll-y="true" class="card-scroll-view-style">
                     <view s-for="record in share.recordDo" class="record-item">
                         <block s-if="{{record.recordType == 1}}">
@@ -95,7 +70,7 @@
                     </view>
                 </scroll-view>
             </view>
-            <view class="blue-card-area" catchtap="showShareDetail" s-if="{{blueCnts[idx] > 0}}" data-open-type="2" data-share-idx="{{idx}}">
+            <view class="blue-card-area" catchtap="showShareDetail" s-if="{{blueCnt > 0}}" data-open-type="2" data-share-idx="{{idx}}">
                 <scroll-view scroll-y="true" class="card-scroll-view-style">
                     <view s-for="record in share.recordDo" class="record-item">
                         <block s-if="{{record.recordType == 2}}">
@@ -117,83 +92,85 @@
             </view>
             </scroll-view>
         </view>
-        <view class="comment-area-block">
-            <view class="comment-intro-line">
-                <text class="comment-gray-text">评论 {{share.totalComments}}</text>
-                <view class="show-all-view-block" bindtap="showAllComments" data-share-idx="{{idx}}">
-                    <text class="comment-gray-text">显示全部</text>
-                    <view class="show-all-arrow-block">
-                        <smt-icon name="arrow-down" color="#B4B4B4" size="28rpx"></smt-icon>
-                    </view>
-                </view>
-            </view>
-            <view class="comment-brief-line">
-                <block s-if="{{share.comments.length > 0}}">
-                <block s-for="comment in share.comments">
-                    <view class="brief-comment-content-line">
-                        <text class="brief-comment-name">{{comment.userDo.nickname}}</text>
-                        <text class="brief-comment-content">{{comment.commentDo.commentContent}}</text>
-                    </view>
-                </block>
-                </block>
-                <block s-else>
-                    <view class="brief-comment-content-line">
-                        <text class="brief-comment-no-content">还没人评论，来说点什么吧~</text>
-                    </view>
-                </block>
-            </view>
-            <view s-if="{{hasLogin}}" class="comment-publish-line">
-                <image class="comment-user-avatar" src="{{currentUserAvatar}}"></image>
-                <!-- <input class="comment-input-obj" placeholder="写评论" bindfocus="focusBriefCommentInput" placeholder-class="ext-comment-input-placehold" data-share-idx="{{idx}}"/> -->
-                <view class="comment-input-obj" bindtap="focusBriefCommentInput" data-share-id="{{share.shareDo.shareId}}">
-                    <text class="ext-comment-input-placehold">写评论</text>
-                </view>
-            </view>
+    </view>
+    <view class="middle-split-line">
+    </view>
+    <view class="comment-top-block">
+        <text class="comment-total-count">评论 {{share.totalComments}}</text>
+        <view class="sort-icon-view" bind:tap="sortRecord">
+            <image class="sort-icon-img" src="../../images/desc.png" s-if="{{currentSort % 2 == 0}}"></image>
+            <image class="sort-icon-img" src="../../images/asc.png" s-else></image>
         </view>
     </view>
-</view>
-<view s-else class="empty-share-list">
-    <text class="empty-share-text">还什么都没有哦，点击右下角分享你的榜单吧～</text>
+    <view class="last-split-line"></view>
+    </view>
+    <scroll-view style="height: {{scrollHeight}}px" scroll-y="true" scroll-top="{= scrollTop =}" class="comment-list-area">
+        <view s-for="comment, idx in comments">
+            <view class="comment-userinfo-message">
+                <image class="comment-userinfo-avatar" src="{{comment.comment.userDo.avatar}}"></image>
+                <view class="comment-userinfo-block">
+                    <text class="comment-userinfo-nickname">{{comment.comment.userDo.nickname}}</text>
+                    <text class="comment-userinfo-time">{{comment.comment.commentDo.addTime}}</text>
+                </view>
+            </view>
+            <view class="comment-detail-content-block">
+                <text class="comment-detail-content-text">{{comment.comment.commentDo.commentContent}}</text>
+            </view>
+            <view s-if="{{comment.subCommentList.length > 0}}" class="multi-reply-area">
+                <gradient-collapse height="192rpx" gradient-collapse-classs="gradient-collapse-area">
+                    <view s-for="subcom in comment.subCommentList">
+                    <text class="comment-sub-user-text">{{subcom.userDo.nickname}}:&nbsp;</text>
+                    </view>
+                </gradient-collapse>
+            </view>
+            <view s-if="{{idx != comments.length - 1}}" class="comment-detail-last-split-line"></view>
+        </view>
+    </scroll-view>
+    <view class="comment-publish-area" id="bottom-input-area">
+        <view class="comment-input-bottom-view">
+                <input class="comment-input-bottom-style" placeholder="写评论" confirm-type="send" placeholder-class="ext-comment-input-placehold"/>
+        </view>
+        <view class="comment-bottom-publish-btn">发送</view>
+    </view>
 </view>
 
 <view s-if="{{showDetail}}" class="detail-view" bindtap="hideDetail">
     <swiper class="detail-card-area" indicator-dots="true" autoplay="false" current-item-id="{{detailCurrentType}}">
-        <block s-for="share, idx in detailShareList">
-            <swiper-item s-if="{{share.length > 0}}" class="detail-card-color-{{idx}}" catchtap="insideEvnetHandler" item-id="{{idx}}">
+        <block s-for="ds, idx in detailShareList">
+            <swiper-item s-if="{{ds.length > 0}}" class="detail-card-color-{{idx}}" catchtap="insideEvnetHandler" item-id="{{idx}}">
                 <view class="detail-card-color-{{idx}" catchtap="insideEvnetHandler">
                     <view class="userinfo-global-block detail-userinfo-global">
                         <view class="detail-userinfo-message">
-                            <image class="userinfo-avatar" src="{{currentDetailShare.userDo.avatar}}">
+                            <image class="userinfo-avatar" src="{{share.userDo.avatar}}">
                     </image>
                     <view class="userinfo-block">
-                        <text class="userinfo-nickname">{{currentDetailShare.userDo.nickname}}</text>
-                        <text class="userinfo-time">{{currentDetailShare.shareDo.modifyTime}}</text>
+                        <text class="userinfo-nickname">{{share.userDo.nickname}}</text>
+                        <text class="userinfo-time">{{share.shareDo.modifyTime}}</text>
                     </view>
                 </view>
                 <view class="userinfo-like">
                     <view class="detail-button-box button-box-mixture">
-                        <smt-like is-liked="{{shareList[currentDetailIdx].like}}" class="custom-class-mixture" mode="mixture"
-                            likeNum="{{shareList[currentDetailIdx].shareDo.likeCnt}}" bind:fail="failLike"
-                            bind:error="nologinError" data-idx="{{currentDetailIdx}}" animation-type="2">
+                        <smt-like is-liked="{{share.like}}" class="custom-class-mixture" mode="mixture"
+                            likeNum="{{share.shareDo.likeCnt}}" bind:fail="failLike"
+                            bind:error="nologinError" animation-type="2">
                         </smt-like>
-                        <smt-like is-liked="{{shareList[currentDetailIdx].collect}}" class="custom-class-mixture"
-                            likeNum="{{shareList[currentDetailIdx].shareDo.collectCnt}}" mode="mixture"
+                        <smt-like is-liked="{{share.collect}}" class="custom-class-mixture"
+                            likeNum="{{share.shareDo.collectCnt}}" mode="mixture"
                             icon-type="heart" like-text="收藏" bind:fail="failCollect" bind:error="nologinError"
-                            data-idx="{{currentDetailIdx}}" animation-type="2">
+                            animation-type="2">
                         </smt-like>
                         <view class="card-share-style">
-                            <image src="../../images/share.png" class="card-share-image" bindtap="shareRecord"
-                                data-idx="{{currentDetailIdx}}"></image>
+                            <image src="../../images/share.png" class="card-share-image" bindtap="shareRecord"></image>
                         </view>
                     </view>
                 </view>
 </view>
 <scroll-view scroll-y="true" scroll-top="{= scrolltop =}" style="height: 836rpx;">
-    <view s-for="record,ridx in share">
+    <view s-for="record,ridx in ds">
         <view class="record-item">
             <view class="record-item-img" style="background-color: {{detailBackgrounColor[idx]}}; border-radius:50%;">
                 <image style="width: 48rpx;height: 48rpx; transform: scale(0.6);"
-                    src="../../images/tag/{{currentDetailShare.shareDo.tagId}}.png">
+                    src="../../images/tag/{{share.shareDo.tagId}}.png">
                 </image>
             </view>
             <view class="detail-record-item-text">{{record.recordTitle}}</view>
@@ -208,32 +185,4 @@
 </swiper-item>
 </block>
 </swiper>
-</view>
-
-<view bindtap="addShare" class="add-icon" catchtouchmove="buttonMove"
-    catchtouchstart="buttonStart"
-    style="bottom: {{bottomDis}}px;right: {{rightDis}}px;">
-    <image class="publish-add-icon" src="../../images/publish.png"></image>
-</view>
-
-<view class="tag-choose-global-block extend-tag-board" style="display: {{tagExpand ? '' : 'none'}}"
-    bind:tap="showExpand">
-    <view class="tag-choose-board" catch:tap="preventCloseExpand">
-        <block s-for="tag,idx in tags">
-        <block s-if="{{idx != 0}}">
-            <view class="extend-tag-btn-style {{(currentTag == tag.tagId ? 'on' : '')}}" data-current="{{tag.tagId}}"
-                bindtap="switchTag">{{tag.tagName}}</view>
-        </block>
-        </block>
-    </view>
-</view>
-</view>
-
-<view s-if="{{showBriefCommentPublish}}" class="detail-view" bindtap="hideBriefCommentPublish">
-    <view class="comment-input-background comment-input-fixed-bottom">
-        <view class="comment-input-bottom-view">
-            <input class="comment-input-bottom-style" placeholder="写评论" confirm-type="send" placeholder-class="ext-comment-input-placehold" focus="true" catchtap="true"/>
-        </view>
-        <view class="comment-bottom-publish-btn">发送</view>
-    </view>
 </view>
