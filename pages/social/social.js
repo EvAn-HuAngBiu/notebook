@@ -38,27 +38,34 @@ Page({
         windowHeight: '',
         windowWidth: '',
         totalCommentCount: 26,
-        currentUserAvatar: '',
+        currentUser: '',
         hasLogin: false,
         showBriefCommentPublish: false,
-        currentBriefCommentShareId: 0
+        currentBriefCommentShareId: 0,
+        currentBriefCommentShareIdx: -1,
+        commentInput: '',
     },
     onLoad: function (options) {
+        var that = this;
         let tags = [].concat(app.globalData.tags);
         tags.unshift({
             tagId: 0,
             tagName: "所有"
         });
-        let curUser = swan.getStorageSync('userInfo');
-        this.setData({
-            tags: tags,
-            currentUserAvatar: curUser.avatarUrl
+        swan.getStorage({
+            key: 'userInfo',
+            success: res => {
+                that.setData({
+                    currentUser: res.data
+                })
+            }
         });
         swan.getSystemInfo({
             success: res => {
-                this.setData({
+                that.setData({
                     windowHeight: res.windowHeight,
                     windowWidth: res.windowWidth,
+                    tags: tags,
                 });
             },
             fail: err => {
@@ -72,14 +79,14 @@ Page({
     onShow: function () {
         var that = this;
         var url = that.data.currentTab === 0 ? api.ShareListNew : api.ShareListHot;
-        let currentUserAvatar = '';
-        if (that.data.currentUserAvatar == '') {
-            currentUserAvatar = swan.getStorageSync('userInfo').avatarUrl;
+        let currentUser = that.data.currentUser;
+        if (that.data.currentUser == '') {
+            currentUser = swan.getStorageSync('userInfo').data;
         }
         that.setData({
             curPage: 1,
             hasLogin: app.globalData.hasLogin,
-            currentUserAvatar: currentUserAvatar
+            currentUser: currentUser
         });
         util.request(url, {
             tagId: that.data.currentTag,
@@ -115,20 +122,6 @@ Page({
                 blackCnts: blackCnts,
                 blueCnts: blueCnts,
             });
-            // util.request(api.CheckLike, shareIds, "POST").then((innerRes) => {
-            //     this.setData({
-            //         likeList: innerRes.data.checked,
-            //     });
-            // }).catch((err) => {
-            //     console.log(err);
-            // });
-            // util.request(api.CheckCollect, shareIds, "POST").then((innerRes) => {
-            //     this.setData({
-            //         collectList: innerRes.data.checked
-            //     })
-            // }).catch((err) => {
-            //     console.log(err);
-            // });
         }).catch((err) => {
             console.log(err);
         });
@@ -469,11 +462,61 @@ Page({
 
     focusBriefCommentInput: function(e) {
         var that = this;
+        if (that.data.hasLogin === false) {
+            swan.switchTab({
+                url: '/pages/mine/mine',
+                success: () => {
+                    util.showErrorToast("请登录后添加");
+                }
+            });
+            return;
+        }
         if (that.data.showBriefCommentPublish === false) {
             that.setData({
                 showBriefCommentPublish: true,
-                currentBriefCommentShareId: e.currentTarget.dataset.shareId
+                currentBriefCommentShareId: e.currentTarget.dataset.shareId,
+                currentBriefCommentShareIdx: e.currentTarget.dataset.shareIdx
             });
         }
+    },
+
+    finishInputComment: function(e) {
+        var that = this;
+        that.setData({
+            commentInput: e.detail.value
+        })
+    },
+
+    submitComment: function() {
+        var that = this;
+        let content = that.data.commentInput;
+        if (util.strIsEmpty(content)) {
+            that.setData({
+                showBriefCommentPublish: false,
+            });
+            util.showErrorToast("评论内容为空");
+            return;
+        }
+        let shareId = that.data.currentBriefCommentShareId;
+        let shareIdx = that.data.currentBriefCommentShareIdx;
+        util.request(api.BriefReplyComments, {shareId: shareId, content: content}, "POST").then((res) => {
+            swan.showToast({
+                title: '评论成功',
+                icon: 'none'
+            })
+            that.setData({
+                showBriefCommentPublish: false,
+            });
+            let shareList = that.data.shareList;
+            shareList[shareIdx].totalComments += 1;
+            if (that.data.shareList[shareIdx].comments.length < 2) {
+                shareList[shareIdx].comments.push({commentDo : {commentContent: content, shareId: shareId}, userDo: {nickname: that.data.currentUser.nickName}});
+            }
+            that.setData({
+                shareList: shareList
+            });
+        }).catch((err) => {
+            console.error(err);
+        })
     }
 });

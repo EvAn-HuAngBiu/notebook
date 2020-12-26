@@ -14,7 +14,14 @@ Page({
         currentSort: 0,
         comments: {},
         hasLogin: false,
-        scrollHeight: 0
+        scrollHeight: 0,
+        showExpandComments: [],
+        replyType: 0,
+        replyPlacehold: '写评论',
+        focusSendInput: false,
+        currentParentId: 0,
+        commentInput: '',
+        commentInputValue: ''
     },
     onLoad: function (options) {
         // 监听页面加载的生命周期函数
@@ -59,11 +66,16 @@ Page({
         var that = this;
         util.request(api.ListComments, {shareId: that.data.share.shareDo.shareId, sortType: that.data.currentSort}, "GET", false).then((res) => {
             let comments = res.data.comments;
+            let showExpandComments = new Array(comments.length);
             comments.forEach(c => {
                 c.comment.commentDo.addTime = util.getDateDiff(c.comment.commentDo.addTime);
             })
+            for (let i = 0; i < comments.length; i++) {
+                showExpandComments[i] = true;
+            }
             that.setData({
-                comments: comments
+                comments: comments,
+                showExpandComments: showExpandComments
             })
         }).catch((err) => {
             console.error(err);
@@ -126,81 +138,136 @@ Page({
         })
     },
 
-    // failLike: function (e) {
-    //     // 这里不使用百度的like功能，故跳转到bind:fail方法执行逻辑
-    //     if (app.globalData.hasLogin === false) {
-    //         util.showErrorToast('请先登录', 1500);
-    //         return;
-    //     }
-    //     var that = this;
-    //     var idx = e.currentTarget.dataset.idx;
-    //     var shareList = that.data.shareList;
-    //     shareList[idx].like = !shareList[idx].like;
-    //     shareList[idx].shareDo.likeCnt += (shareList[idx].like ? 1 : -1);
-    //     util.request(shareList[idx].like ? api.LikeRecord : api.DislikeRecord, parseInt(shareList[idx].shareDo.shareId), "POST").then((res) => {
-    //         if (res.success === true) {
-    //             that.setData({
-    //                 shareList: shareList
-    //             });
-    //         } else {
-    //             util.showErrorToast('操作失败');
-    //             console.error(res);
-    //         }
-    //     }).catch((err) => {
-    //         util.showErrorToast('操作失败');
-    //         console.error(err);
-    //     })
+    failLike: function (e) {
+        // 这里不使用百度的like功能，故跳转到bind:fail方法执行逻辑
+        if (app.globalData.hasLogin === false) {
+            util.showErrorToast('请先登录', 1500);
+            return;
+        }
+        var that = this;
+        let share = that.data.share;
+        share.like = !share.like;
+        share.shareDo.likeCnt += (share.like ? 1 : -1);
+        util.request(share.like ? api.LikeRecord : api.DislikeRecord, parseInt(share.shareDo.shareId), "POST").then((res) => {
+            if (res.success === true) {
+                that.setData({
+                    share: share
+                });
+            } else {
+                util.showErrorToast('操作失败');
+                console.error(res);
+            }
+        }).catch((err) => {
+            util.showErrorToast('操作失败');
+            console.error(err);
+        })
+    },
 
-    // },
-
-    // failCollect: function (e) {
-    //     // 这里不使用百度的like功能，故跳转到bind:fail方法执行逻辑
-    //     if (app.globalData.hasLogin === false) {
-    //         util.showErrorToast('请先登录', 1500);
-    //         return;
-    //     }
-    //     var that = this;
-    //     var idx = e.currentTarget.dataset.idx;
-    //     var shareList = that.data.shareList;
-    //     shareList[idx].collect = !shareList[idx].collect;
-    //     shareList[idx].shareDo.collectCnt += (shareList[idx].collect ? 1 : -1);
-    //     util.request(shareList[idx].collect ? api.CollectShare : api.CancelCollect, parseInt(shareList[idx].shareDo.shareId), "POST").then((res) => {
-    //         if (res.success === true) {
-    //             that.setData({
-    //                 shareList: shareList
-    //             });
-    //         } else {
-    //             util.showErrorToast('操作失败');
-    //             console.error(res);
-    //         }
-    //     }).catch((err) => {
-    //         util.showErrorToast('操作失败');
-    //         console.error(err);
-    //     })
-    // },
+    failCollect: function (e) {
+        // 这里不使用百度的like功能，故跳转到bind:fail方法执行逻辑
+        if (app.globalData.hasLogin === false) {
+            util.showErrorToast('请先登录', 1500);
+            return;
+        }
+        var that = this;
+        var share = that.data.share;
+        share.collect = !share.collect;
+        share.shareDo.collectCnt += (share.collect ? 1 : -1);
+        util.request(share.collect ? api.CollectShare : api.CancelCollect, parseInt(share.shareDo.shareId), "POST").then((res) => {
+            if (res.success === true) {
+                that.setData({
+                    share: share
+                });
+            } else {
+                util.showErrorToast('操作失败');
+                console.error(res);
+            }
+        }).catch((err) => {
+            util.showErrorToast('操作失败');
+            console.error(err);
+        })
+    },
 
     sortRecord: function() {
         var that = this;
-        // let items = [];
-        // that.data.sortLabel.forEach(s => {
-        //     items.push(s.name);
-        // });
-        // swan.showActionSheet({
-        //     itemList: items,
-        //     itemColor: '#000000',
-        //     success: function (res) {
-        //         if (that.data.currentSort != that.data.sortLabel[res.tapIndex].id) {
-        //             that.setData({
-        //                 currentSort: that.data.sortLabel[res.tapIndex].id
-        //             });
-        //             that.onShow();
-        //         }
-        //     }
-        // });
-
         that.setData({
             currentSort: that.data.currentSort == 0 ? 1 : 0
         });
         that.onShow();
+    },
+
+    showAllComments: function(e) {
+        var that = this;
+        let idx = e.currentTarget.dataset.showIdx;
+        let arr = that.data.showExpandComments;
+        arr[idx] = false;
+        that.setData({
+            showExpandComments: arr
+        });
+    },
+
+    replyMessage: function(e) {
+        var that = this;
+        let idx = e.currentTarget.dataset.idx;
+        that.setData({
+            focusSendInput: true,
+            replyPlacehold: '回复 ' + that.data.comments[idx].comment.userDo.nickname,
+            replyType: 1,
+            currentParentId: that.data.comments[idx].comment.commentDo.commentId
+        });
+    },
+
+    replySubMessage: function(e) {
+        var that = this;
+        let idx = e.currentTarget.dataset.idx;
+        let sidx = e.currentTarget.dataset.subidx;
+        that.setData({
+            focusSendInput: true,
+            replyPlacehold: '回复 ' + that.data.comments[idx].subCommentList[sidx].userDo.nickname,
+            replyType: 1,
+            currentParentId: that.data.comments[idx].subCommentList[sidx].commentDo.commentId
+        });
+    },
+
+    blurCommentInput: function() {
+        var that = this;
+        that.setData({
+            focusSendInput: false,
+            replyPlacehold: '写评论',
+            commentInputValue: '',
+        })
+    },
+
+    finishInputComment: function(e) {
+        var that = this;
+        that.setData({
+            commentInput: e.detail.value
+        })
+    },
+
+    submitReply: function() {
+        var that = this;
+        let shareId = that.data.share.shareDo.shareId;
+        let parentId = that.data.currentParentId;
+        let content = that.data.commentInput;
+        let commentType = that.data.replyType;
+        if (util.strIsEmpty(content)) {
+            util.showErrorToast("评论内容为空");
+            return;
+        }
+        util.request(api.ReplyComments, {commentType: commentType, commentContent: content, shareId: shareId, parentCommentId: parentId}, "POST").then((res) => {
+            swan.showToast({
+                title: '评论成功',
+                icon: 'none',
+                success: () => {
+                    that.setData({
+                        replyType: 0
+                    })
+                    this.onShow();
+                }
+            })
+        }).catch((err) => {
+            console.error(err);
+        })
     }
 });

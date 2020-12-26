@@ -428,7 +428,7 @@ page {
 }
 
 .comment-detail-content-block {
-    margin: 0 0 36rpx 128rpx;
+    margin: 0 0 32rpx 128rpx;
 }
 
 .comment-detail-last-split-line {
@@ -501,4 +501,49 @@ page {
     line-height: 48rpx;
     color: #F55E68;
     opacity: 1;
+}
+
+.comment-sub-content-text {
+    font-size: 28rpx;
+    font-family: Source Han Sans CN;
+    font-weight: 400;
+    line-height: 48rpx;
+    color: #3D3535;
+    opacity: 1;
+}
+
+.comment-content-block {
+    margin: 0 16rpx 0 16rpx;
+    display: flex;
+}
+
+.multi-reply-area {
+    width: 592rpx;
+    max-height: 192rpx;
+    background: #F5F5F5;
+    opacity: 1;
+    border-radius: 10rpx;
+    margin: 0 30rpx 32rpx 128rpx;
+    /* padding: 16rpx 40rpx 13rpx 19rpx; */
+    padding: 16rpx 0 16rpx 0;
+}
+
+.comment-sub-show-all-text {
+    font-size: 24rpx;
+    font-family: Source Han Sans CN;
+    font-weight: 400;
+    line-height: 48rpx;
+    color: #F55E68;
+    opacity: 1;
+    margin: 0 16rpx 0 16rpx;
+}
+
+.text-single-line-block {
+    width: 100%;
+    display: -webkit-box;
+    word-break: break-all;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
+    text-overflow:ellipsis;
 }

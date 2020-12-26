@@ -1,8 +1,8 @@
 // 业务API的请求地址
 // var ApiRoot = 'http://localhost:9801/';
 // var ApiRoot = 'http://10.206.245.40:9801/';
-var ApiRoot = 'http://192.168.1.105:9801/';
-// var ApiRoot = 'https://www.rblacklist.cn/';
+// var ApiRoot = 'http://192.168.1.103:9801/';
+var ApiRoot = 'https://www.rblacklist.cn/';
 
 module.exports = {
     ApiRoot: ApiRoot,
@@ -45,5 +45,7 @@ module.exports = {
     CancelCollect: ApiRoot + 'collect/cancel',
     CheckCollect: ApiRoot + 'collect/check',
 
-    ListComments: ApiRoot + 'comment/list'
+    ListComments: ApiRoot + 'comment/list',
+    BriefReplyComments: ApiRoot + 'comment/brief-reply',
+    ReplyComments: ApiRoot + 'comment/reply'
 };

@@ -127,7 +127,7 @@
                     </view>
                 </view>
             </view>
-            <view class="comment-brief-line">
+            <view class="comment-brief-line" bindtap="showAllComments" data-share-idx="{{idx}}">
                 <block s-if="{{share.comments.length > 0}}">
                 <block s-for="comment in share.comments">
                     <view class="brief-comment-content-line">
@@ -142,10 +142,11 @@
                     </view>
                 </block>
             </view>
-            <view s-if="{{hasLogin}}" class="comment-publish-line">
-                <image class="comment-user-avatar" src="{{currentUserAvatar}}"></image>
+            <view class="comment-publish-line">
+                <image s-if="{{hasLogin}}" class="comment-user-avatar" src="{{currentUser.avatarUrl}}"></image>
+                <image s-else class="comment-user-avatar" src="../../images/no-login.png"></image>
                 <!-- <input class="comment-input-obj" placeholder="写评论" bindfocus="focusBriefCommentInput" placeholder-class="ext-comment-input-placehold" data-share-idx="{{idx}}"/> -->
-                <view class="comment-input-obj" bindtap="focusBriefCommentInput" data-share-id="{{share.shareDo.shareId}}">
+                <view class="comment-input-obj" bindtap="focusBriefCommentInput" data-share-id="{{share.shareDo.shareId}}" data-share-idx="{{idx}}">
                     <text class="ext-comment-input-placehold">写评论</text>
                 </view>
             </view>
@@ -232,8 +233,8 @@
 <view s-if="{{showBriefCommentPublish}}" class="detail-view" bindtap="hideBriefCommentPublish">
     <view class="comment-input-background comment-input-fixed-bottom">
         <view class="comment-input-bottom-view">
-            <input class="comment-input-bottom-style" placeholder="写评论" confirm-type="send" placeholder-class="ext-comment-input-placehold" focus="true" catchtap="true"/>
+            <input class="comment-input-bottom-style" placeholder="写评论" confirm-type="send" placeholder-class="ext-comment-input-placehold" focus="true" catchtap="true" bindinput="finishInputComment" bindconfirm="submitComment"/>
         </view>
-        <view class="comment-bottom-publish-btn">发送</view>
+        <view class="comment-bottom-publish-btn" bindtap="submitComment">发送</view>
     </view>
 </view>

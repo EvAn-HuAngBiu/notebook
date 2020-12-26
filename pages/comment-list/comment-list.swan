@@ -12,16 +12,14 @@
             <view class="userinfo-like">
                 <view class="button-box button-box-mixture">
                     <smt-like is-liked="{{share.like}}" class="custom-class-mixture" mode="mixture"
-                        likeNum="{{share.shareDo.likeCnt}}" bind:fail="failLike" bind:error="nologin"
-                        data-idx="{{idx}}" animation-type="2">
+                        likeNum="{{share.shareDo.likeCnt}}" bind:fail="failLike" bind:error="nologin" animation-type="2">
                     </smt-like>
                     <smt-like is-liked="{{share.collect}}" class="custom-class-mixture" likeNum="{{share.shareDo.collectCnt}}" mode="mixture"
                         icon-type="heart" like-text="收藏" bind:fail="failCollect" bind:error="nologin"
                         data-idx="{{idx}}" animation-type="2">
                     </smt-like>
                     <view class="card-share-style">
-                        <image src="../../images/share.png" class="card-share-image" bindtap="shareRecord"
-                            data-idx="{{idx}}"></image>
+                        <image src="../../images/share.png" class="card-share-image" bindtap="shareRecord"></image>
                     </view>
                 </view>
             </view>
@@ -113,24 +111,50 @@
                     <text class="comment-userinfo-time">{{comment.comment.commentDo.addTime}}</text>
                 </view>
             </view>
-            <view class="comment-detail-content-block">
+            <view class="comment-detail-content-block" bindtap="replyMessage" data-idx="{{idx}}">
                 <text class="comment-detail-content-text">{{comment.comment.commentDo.commentContent}}</text>
             </view>
             <view s-if="{{comment.subCommentList.length > 0}}" class="multi-reply-area">
-                <gradient-collapse height="192rpx" gradient-collapse-classs="gradient-collapse-area">
-                    <view s-for="subcom in comment.subCommentList">
-                    <text class="comment-sub-user-text">{{subcom.userDo.nickname}}:&nbsp;</text>
-                    </view>
-                </gradient-collapse>
+            <block s-if="{{showExpandComments[idx]}}">
+                <block s-for="subcom, sidx in comment.subCommentList" >
+                <view s-if="{{sidx < 2}}" class="comment-content-block" catchtap="replySubMessage" data-idx="{{idx}}" data-subidx="{{sidx}}">
+                    <text class="text-single-line-block">
+                        <text class="comment-sub-user-text">{{subcom.userDo.nickname}}</text>
+                        <block s-if="{{subcom.commentDo.parentCommentId != comment.comment.commentDo.commentId}}">
+                        <text class="comment-sub-content-text">&nbsp;回复&nbsp;</text>
+                        <text class="comment-sub-user-text">{{subcom.parentNickname}}</text>
+                        </block>
+                        <text class="comment-sub-content-text">:&nbsp;{{subcom.commentDo.commentContent}}</text>
+                    </text>
+                </view>
+                </block>
+                <view s-if="{{comment.subCommentList.length > 2}}" bindtap="showAllComments" data-show-idx="{{idx}}">
+                    <text class="comment-sub-show-all-text" >查看全部 {{comment.subCommentList.length}}条 回复>></text>
+                </view>
+            </block>
+            <block s-else>
+                <block s-for="subcom, sidx in comment.subCommentList" >
+                <view class="comment-content-block" catchtap="replySubMessage"  data-idx="{{idx}}" data-subidx="{{sidx}}">
+                    <text>
+                        <text class="comment-sub-user-text">{{subcom.userDo.nickname}}</text>
+                        <block s-if="{{subcom.commentDo.parentCommentId != comment.comment.commentDo.commentId}}">
+                        <text class="comment-sub-content-text">&nbsp;回复&nbsp;</text>
+                        <text class="comment-sub-user-text">{{subcom.parentNickname}}</text>
+                        </block>
+                        <text class="comment-sub-content-text">:&nbsp;{{subcom.commentDo.commentContent}}</text>
+                    </text>
+                </view>
+                </block>
+            </block>
             </view>
             <view s-if="{{idx != comments.length - 1}}" class="comment-detail-last-split-line"></view>
         </view>
     </scroll-view>
     <view class="comment-publish-area" id="bottom-input-area">
         <view class="comment-input-bottom-view">
-                <input class="comment-input-bottom-style" placeholder="写评论" confirm-type="send" placeholder-class="ext-comment-input-placehold"/>
+                <input class="comment-input-bottom-style" placeholder="{{replyPlacehold}}" confirm-type="send" focus="{{focusSendInput}}" placeholder-class="ext-comment-input-placehold" value="{= commentInputValue =}" bindblur="blurCommentInput" bindinput="finishInputComment"/>
         </view>
-        <view class="comment-bottom-publish-btn">发送</view>
+        <view class="comment-bottom-publish-btn" bindtap="submitReply">发送</view>
     </view>
 </view>
 

@@ -8,11 +8,11 @@
     },
     "host": "baiduboxapp",
     "preview": {
-        "packageId": 791480
+        "packageId": 795733
     },
     "projectname": "notebook",
     "publish": {
-        "version": "1.0.7"
+        "version": "1.0.8"
     },
     "setting": {
         "urlCheck": false
