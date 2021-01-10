@@ -9,7 +9,7 @@
 .personal-info-card {
     display: flex;
     position: absolute;
-    top: 112rpx;
+    /* top: 112rpx; */
     left: 16rpx;
     right: 14rpx;
     height: 176rpx;
@@ -519,4 +519,25 @@ button::after {
     overflow: hidden;
     position: fixed;
     z-index: 0;
+}
+
+
+.status-height {
+    background-color: #F55E68;
+}
+
+.nav-height {
+    background-color:#F55E68;
+    display: flex;
+    align-items: center;
+}
+
+.nav-text-block {
+    color: #FFFFFF;
+    margin-left: 235rpx;
+}
+
+.nav-notify-img {
+    width: 36rpx;
+    margin-left: 39rpx;
 }

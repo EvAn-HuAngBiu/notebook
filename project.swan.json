@@ -3,24 +3,26 @@
     "compilation-args": {
         "common": {
             "enhance": true,
-            "ignoreTransJs": false
+            "ignoreTransJs": false,
+            "imgCompress": true
         }
     },
     "host": "baiduboxapp",
     "preview": {
-        "packageId": 795733
+        "packageId": 802387
     },
     "projectname": "notebook",
     "publish": {
-        "version": "1.0.8"
+        "version": "1.0.9"
     },
     "setting": {
+        "autoAudits": false,
         "urlCheck": false
     },
     "swan": {
         "baiduboxapp": {
-            "extensionJsVersion": "1.15.3",
-            "swanJsVersion": "3.200.116"
+            "swanJsVersion": "3.200.116",
+            "extensionJsVersion": "1.15.3"
         }
     }
 }

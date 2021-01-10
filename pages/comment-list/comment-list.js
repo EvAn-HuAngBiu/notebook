@@ -21,21 +21,52 @@ Page({
         focusSendInput: false,
         currentParentId: 0,
         commentInput: '',
-        commentInputValue: ''
+        commentInputValue: '',
+        comingType: 0
     },
     onLoad: function (options) {
-        // 监听页面加载的生命周期函数
-        var previous = getCurrentPages();
-        var previousData = previous[previous.length - 2].data;
         var that = this;
-        that.setData({
-            shareIdx: options.shareIdx,
-            share: previousData.shareList[options.shareIdx],
-            redCnt: previousData.redCnts[options.shareIdx],
-            blackCnt: previousData.blackCnts[options.shareIdx],
-            blueCnt: previousData.blueCnts[options.shareIdx],
-            hasLogin: previousData.hasLogin
-        });
+        // 监听页面加载的生命周期函数
+        if (options.type == 0) {
+            var previous = getCurrentPages();
+            var previousData = previous[previous.length - 2].data;
+            that.setData({
+                shareIdx: options.shareIdx,
+                share: previousData.shareList[options.shareIdx],
+                redCnt: previousData.redCnts[options.shareIdx],
+                blackCnt: previousData.blackCnts[options.shareIdx],
+                blueCnt: previousData.blueCnts[options.shareIdx],
+                hasLogin: previousData.hasLogin,
+                commentType: options.type
+            });
+            this.listComments();
+        } else {
+            let shareId = options.shareId;
+            util.request(api.ShareSpecify, {shareId: shareId}, "GET", false).then((res) => {
+                if (res.success) {
+                    let redCnt = 0, blackCnt = 0, blueCnt = 0;
+                    res.data.share.recordDo.forEach(r => {
+                        if (r.recordType == 0) {
+                            ++redCnt;
+                        } else if (r.recordType == 1) {
+                            ++blackCnt;
+                        } else {
+                            ++blueCnt;
+                        }
+                    })
+                    res.data.share.shareDo.modifyTime = util.getDateDiff(res.data.share.shareDo.modifyTime);
+                    that.setData({
+                        share: res.data.share,
+                        redCnt: redCnt,
+                        blackCnt: blackCnt,
+                        blueCnt: blueCnt,
+                        hasLogin: app.globalData.hasLogin,
+                        commentType: options.type
+                    });
+                    this.listComments();
+                }
+            })
+        }
     },
     onReady: function() {
         // 监听页面初次渲染完成的生命周期函数
@@ -63,23 +94,6 @@ Page({
     },
     onShow: function() {
         // 监听页面显示的生命周期函数
-        var that = this;
-        util.request(api.ListComments, {shareId: that.data.share.shareDo.shareId, sortType: that.data.currentSort}, "GET", false).then((res) => {
-            let comments = res.data.comments;
-            let showExpandComments = new Array(comments.length);
-            comments.forEach(c => {
-                c.comment.commentDo.addTime = util.getDateDiff(c.comment.commentDo.addTime);
-            })
-            for (let i = 0; i < comments.length; i++) {
-                showExpandComments[i] = true;
-            }
-            that.setData({
-                comments: comments,
-                showExpandComments: showExpandComments
-            })
-        }).catch((err) => {
-            console.error(err);
-        })
     },
     onHide: function() {
         // 监听页面隐藏的生命周期函数
@@ -138,7 +152,7 @@ Page({
         })
     },
 
-    failLike: function (e) {
+    failLike: function () {
         // 这里不使用百度的like功能，故跳转到bind:fail方法执行逻辑
         if (app.globalData.hasLogin === false) {
             util.showErrorToast('请先登录', 1500);
@@ -163,7 +177,7 @@ Page({
         })
     },
 
-    failCollect: function (e) {
+    failCollect: function () {
         // 这里不使用百度的like功能，故跳转到bind:fail方法执行逻辑
         if (app.globalData.hasLogin === false) {
             util.showErrorToast('请先登录', 1500);
@@ -255,7 +269,7 @@ Page({
             util.showErrorToast("评论内容为空");
             return;
         }
-        util.request(api.ReplyComments, {commentType: commentType, commentContent: content, shareId: shareId, parentCommentId: parentId}, "POST").then((res) => {
+        util.request(api.ReplyComments, {commentType: commentType, commentContent: content, shareId: shareId, parentCommentId: parentId}, "POST").then(() => {
             swan.showToast({
                 title: '评论成功',
                 icon: 'none',
@@ -265,6 +279,26 @@ Page({
                     })
                     this.onShow();
                 }
+            })
+        }).catch((err) => {
+            console.error(err);
+        })
+    },
+
+    listComments: function() {
+        var that = this;
+        util.request(api.ListComments, {shareId: that.data.share.shareDo.shareId, sortType: that.data.currentSort}, "GET", false).then((res) => {
+            let comments = res.data.comments;
+            let showExpandComments = new Array(comments.length);
+            comments.forEach(c => {
+                c.comment.commentDo.addTime = util.getDateDiff(c.comment.commentDo.addTime);
+            })
+            for (let i = 0; i < comments.length; i++) {
+                showExpandComments[i] = true;
+            }
+            that.setData({
+                comments: comments,
+                showExpandComments: showExpandComments
             })
         }).catch((err) => {
             console.error(err);

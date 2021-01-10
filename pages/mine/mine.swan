@@ -1,6 +1,13 @@
+<view class="status-height" style="height:{{statusHeight}}px"></view>
+<view class="nav-height" style="height:{{navHeight}}px">
+    <!-- <image class="nav-notify-img" src="../../images/notify.png" bindtap="showNotify" mode="widthFix"></image> -->
+    <image s-if="{{hasNewNotify}}" class="nav-notify-img" src="../../images/notify.png" bindtap="showNotify" mode="widthFix"></image>
+    <image s-else class="nav-notify-img" src="../../images/notify-new.png" bindtap="showNotify" mode="widthFix"></image>
+    <text class="nav-text-block">个人中心</text>
+</view>
 <view class="wrap {{showDetail ? 'prevent-scroll-style' : ''}}">
     <view class="mine-top-block"></view>
-    <view class="personal-info-card">
+    <view class="personal-info-card" style="top: {{userInfoCardTop}}px">
         <view class="userinfo-global-block-style">
             <image s-if="{{login}}" class="userinfo-avater-style" src="{{user.avatarUrl}}"></image>
             <image s-else class="userinfo-avater-style" src="../../images/no-login.png"></image>

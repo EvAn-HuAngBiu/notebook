@@ -47,5 +47,11 @@ module.exports = {
 
     ListComments: ApiRoot + 'comment/list',
     BriefReplyComments: ApiRoot + 'comment/brief-reply',
-    ReplyComments: ApiRoot + 'comment/reply'
+    ReplyComments: ApiRoot + 'comment/reply',
+
+    CheckNewNotify: ApiRoot + 'notify/check',
+    UncheckNewNotify: ApiRoot + 'notify/uncheck',
+    ListNotifies: ApiRoot + 'notify/list',
+
+    MineIndex: ApiRoot + 'mine/index'
 };

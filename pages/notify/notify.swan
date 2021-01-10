@@ -1,0 +1,23 @@
+<view s-if="{{notifies.length > 0}}" class="wrap wrap-global-block">
+    <scroll-view style="height:100%" scroll-y="true">
+        <block s-for="notify, idx in notifies">
+            <view class="notify-block" data-idx="{{idx}}" bindtap="showCommentDetail">
+                <image class="notify-avatar-img" src="{{notify.avatar}}"></image>
+                <view class="notify-user-info-block">
+                    <view class="notify-username">{{notify.nickName}}</view>
+                    <view class="notify-comment-content">{{notify.commentContent}}</view>
+                    <view class="notify-time-block">{{notify.addTime}}</view>
+                </view>
+                <view class="notify-title-block background-{{notify.recordType}}">
+                    <view s-if="{{notify.readType == false}}" class="notify-new-radium"></view>
+                    <text class="notify-title">{{notify.recordTitle}}</text>
+                </view>
+            </view>
+            <view class="notify-block-split-line"></view>
+        </block>
+    </scroll-view>
+</view>
+
+<view class="notify-content-block" s-else>
+<text class="notify-empty-text">暂时没有消息哟~</text>
+</view>

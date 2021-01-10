@@ -1,6 +1,5 @@
 const app = getApp()
 const api = require("../../config/api.js");
-const user = require("../../util/user.js");
 const util = require("../../util/util.js");
 
 Page({
@@ -188,7 +187,7 @@ Page({
                 console.error(res);
             }
         }).catch((err) => {
-            console.error(res);
+            console.error(err);
         })
     },
 

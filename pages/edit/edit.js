@@ -1,6 +1,5 @@
 const app = getApp()
 const api = require("../../config/api.js");
-const user = require("../../util/user.js");
 const util = require("../../util/util.js");
 
 Page({
@@ -51,7 +50,7 @@ Page({
         // 监听页面初次渲染完成的生命周期函数
     },
 
-    onShow: function(options) {
+    onShow: function() {
         // 监听页面显示的生命周期函数
     },
 
@@ -178,7 +177,6 @@ Page({
         });
         // 请求上传签名
         util.request(api.SignatureUpload, {}, "POST").then((sig) => {
-            let keyStrArr = []
             let filePicUrl = that.data.urlLocalList;
             let promise = Promise.all(filePicUrl.map((filePath) => {
                     if (filePath.substr(0,6) == "bdfile") {

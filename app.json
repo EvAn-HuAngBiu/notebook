@@ -7,7 +7,8 @@
         "pages/edit/edit",
         "pages/mine/mine",
         "pages/share/share",
-        "pages/comment-list/comment-list"
+        "pages/comment-list/comment-list",
+        "pages/notify/notify"
     ],
     "window": {
         "navigationBarBackgroundColor": "#ffffff",

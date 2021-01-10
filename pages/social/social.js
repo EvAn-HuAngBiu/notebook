@@ -16,8 +16,8 @@ Page({
         curPage: 1,
         curSize: 10,
         shareList: [],
-        likeList: [],
-        collectList: [],
+        // likeList: [],
+        // collectList: [],
         tags: [],
         currentTag: 0,
         showDetail: false,
@@ -45,7 +45,10 @@ Page({
         currentBriefCommentShareIdx: -1,
         commentInput: '',
     },
-    onLoad: function (options) {
+    onInit: function() {
+
+    },
+    onLoad: function () {
         var that = this;
         let tags = [].concat(app.globalData.tags);
         tags.unshift({
@@ -135,14 +138,14 @@ Page({
     onPullDownRefresh: function () {
         // 监听用户下拉动作
         swan.showNavigationBarLoading();
-        let promise = new Promise((resolve, reject) => {
+        let promise = new Promise((resolve) => {
             this.onShow();
             resolve(true);
         })
         promise.then(() => {
             swan.pageScrollTo({
                 scrollTop: 0,
-                success: res => {
+                success: () => {
                     swan.stopPullDownRefresh();
                     swan.hideNavigationBarLoading();
                 }
@@ -175,7 +178,6 @@ Page({
                     let red = 0,
                         black = 0,
                         blue = 0;
-                    let date = new Date(s.shareDo.modifyTime);
                     s.shareDo.modifyTime = util.getDateDiff(util.strIsEmpty(s.shareDo.modifyTime) ? s.shareDo.modifyTime : s.shareDo.addTime);
                     s.recordDo.forEach(r => {
                         // for (let i = 0; i < r.picUrl.length; i++) {
@@ -201,20 +203,20 @@ Page({
                     blueCnts: that.data.blueCnts.concat(blueCnts),
                     curPage: page
                 });
-                util.request(api.CheckLike, shareIds, "POST").then((innerRes) => {
-                    this.setData({
-                        likeList: that.data.likeList.concat(innerRes.data.checked),
-                    });
-                }).catch((err) => {
-                    console.log(err);
-                });
-                util.request(api.CheckCollect, shareIds, "POST").then((innerRes) => {
-                    this.setData({
-                        collectList: that.data.collectList.concat(innerRes.data.checked)
-                    })
-                }).catch((err) => {
-                    console.log(err);
-                });
+                // util.request(api.CheckLike, shareIds, "POST").then((innerRes) => {
+                //     this.setData({
+                //         likeList: that.data.likeList.concat(innerRes.data.checked),
+                //     });
+                // }).catch((err) => {
+                //     console.log(err);
+                // });
+                // util.request(api.CheckCollect, shareIds, "POST").then((innerRes) => {
+                //     this.setData({
+                //         collectList: that.data.collectList.concat(innerRes.data.checked)
+                //     })
+                // }).catch((err) => {
+                //     console.log(err);
+                // });
             }).catch((err) => {
                 console.log(err);
             });
@@ -377,7 +379,7 @@ Page({
             title: '红黑记录本|体验、记录、分享生活',
             content: user.nickName + '正在分享ta的记录榜单，快来围观吧',
             path: '/pages/social/social?idx=' + that.data.shareList[idx].shareDo.shareId,
-            success: res => {
+            success: () => {
                 swan.showToast({
                     title: '分享成功',
                     icon: 'none'
@@ -405,7 +407,6 @@ Page({
                     util.showErrorToast("请登录后添加");
                 }
             });
-            return;
             return;
         }
         var that = this;
@@ -447,7 +448,7 @@ Page({
     showAllComments: function(e) {
         let shareIdx = e.currentTarget.dataset.shareIdx;
         swan.navigateTo({
-            url: '/pages/comment-list/comment-list?shareIdx=' + shareIdx
+            url: '/pages/comment-list/comment-list?type=0&shareIdx=' + shareIdx
         });
     },
 
@@ -499,7 +500,7 @@ Page({
         }
         let shareId = that.data.currentBriefCommentShareId;
         let shareIdx = that.data.currentBriefCommentShareIdx;
-        util.request(api.BriefReplyComments, {shareId: shareId, content: content}, "POST").then((res) => {
+        util.request(api.BriefReplyComments, {shareId: shareId, content: content}, "POST").then(() => {
             swan.showToast({
                 title: '评论成功',
                 icon: 'none'

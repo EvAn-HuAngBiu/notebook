@@ -3,6 +3,7 @@
     "navigationBarBackgroundColor": "#F55E68",
     "navigationBarTextStyle": "white",
     "backgroundColor": "#F9F9F9",
+    "navigationStyle": "custom",
     "usingComponents": {
         "smt-textarea": "@smt-ui/component/src/textarea",
         "smt-rate": "@smt-ui/component/src/rate",

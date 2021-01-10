@@ -3,7 +3,6 @@
  * @author swan
  */
 const app = getApp()
-const api = require("../../config/api.js");
 const user = require("../../util/user.js");
 const util = require("../../util/util.js");
 
@@ -45,7 +44,7 @@ Page({
         }
 
         user.checkLogin().catch(() => {
-            user.baiduLogin(e.detail.userInfo).then((res) => {
+            user.baiduLogin(e.detail.userInfo).then(() => {
                 app.globalData.hasLogin = true;
                 swan.showToast({
                     title: '登录成功',
@@ -55,7 +54,7 @@ Page({
                     hasUserInfo: true,
                     userInfo: e.detail.userInfo
                 })
-            }, (err) => {
+            }, () => {
                 app.globalData.hasLogin = false;
                 util.showErrorToast('登录失败');
             })

@@ -24,12 +24,28 @@ Page({
         collectList: [],
         detailBackgrounColor: ["#F55E68", "#707070", "#49CAC1"],
         currentDetailShare: [],
-        newLikeCount: 0
+        newLikeCount: 0,
+        statusHeight: 0,
+        navHeight: 0,
+        userInfoCardTop: 0,
+        hasNewNotify: false
     },
     onLoad: function () {
         // 监听页面加载的生命周期函数
         swan.removeTabBarBadge({
             index: 2
+        });
+        let capsule = swan.getMenuButtonBoundingClientRect();
+        swan.getSystemInfo({
+            success: res => {
+                let navHeight = capsule.height + (capsule.top - res.statusBarHeight) * 2;
+                let userInfoCardTop = 122 / 750 * res.windowWidth + navHeight + res.statusBarHeight;
+                this.setData({
+                    statusHeight: res.statusBarHeight,
+                    navHeight,
+                    userInfoCardTop
+                })
+            }
         });
     },
     onReady: function() {
@@ -49,36 +65,59 @@ Page({
                 curPage: 1,
                 curSize: 10
             });
-            util.request(api.CountRecord, {}, "POST").then((res) => {
+            util.request(api.MineIndex).then((res) => {
                 if (res.success === true) {
                     that.setData({
-                        totalPublish: res.data.count
+                        totalPublish: res.data.recordCount,
+                        gotLiked: res.data.totalRecord,
+                        newLikeCount: app.globalData.newLikeCount + res.data.newRecord > 99 ? 99 : app.globalData.newLikeCount + res.data.newRecord,
+                        totalCollect: res.data.collectCount,
+                        totalShare: res.data.shareCount,
+                        hasNewNotify: res.data.notifyCheck
                     })
+                    this.listShares();
+                } else {
+                    console.log(res);
                 }
-            });
-            util.request(api.TotalRecord).then((res) => {
-                if (res.success === true) {
-                    that.setData({
-                        gotLiked: res.data.total,
-                        newLikeCount: app.globalData.newLikeCount + res.data.new > 99 ? 99 : app.globalData.newLikeCount + res.data.new
-                    })
-                }
-            });
-            util.request(api.CountCollect).then((res) => {
-                if (res.success === true) {
-                    that.setData({
-                        totalCollect: res.data.collectCount
-                    })
-                }
-            });
-            util.request(api.ShareCount).then((res) => {
-                if (res.success === true) {
-                    that.setData({
-                        totalShare: res.data.total
-                    })
-                }
-            });
-            this.listShares();
+            }).catch(err => {
+                console.log(err);
+            })
+            // util.request(api.CountRecord, {}, "POST").then((res) => {
+            //     if (res.success === true) {
+            //         that.setData({
+            //             totalPublish: res.data.count
+            //         })
+            //     }
+            // });
+            // util.request(api.TotalRecord).then((res) => {
+            //     if (res.success === true) {
+            //         that.setData({
+            //             gotLiked: res.data.total,
+            //             newLikeCount: app.globalData.newLikeCount + res.data.new > 99 ? 99 : app.globalData.newLikeCount + res.data.new
+            //         })
+            //     }
+            // });
+            // util.request(api.CountCollect).then((res) => {
+            //     if (res.success === true) {
+            //         that.setData({
+            //             totalCollect: res.data.collectCount
+            //         })
+            //     }
+            // });
+            // util.request(api.ShareCount).then((res) => {
+            //     if (res.success === true) {
+            //         that.setData({
+            //             totalShare: res.data.total
+            //         })
+            //     }
+            // });
+            // util.request(api.CheckNewNotify).then((res) => {
+            //     if (res.success === true) {
+            //         that.setData({
+            //             hasNewNotify: res.data.check
+            //         })
+            //     }
+            // })
         }, () => {
             app.globalData.hasLogin = false;
             swan.removeStorage({
@@ -114,7 +153,7 @@ Page({
     onShareAppMessage: function () {
         // 用户点击右上角转发
     },
-    onPageScroll: function (e) {
+    onPageScroll: function () {
         let query = swan.createSelectorQuery();
         var that = this;
         query.select('#center-block').boundingClientRect((rect) => {
@@ -293,7 +332,7 @@ Page({
         }
 
         user.checkLogin().catch(() => {
-            user.baiduLogin(e.detail.userInfo).then((res) => {
+            user.baiduLogin(e.detail.userInfo).then(() => {
                 app.globalData.hasLogin = true;
                 swan.showToast({
                     title: '登录成功',
@@ -335,7 +374,7 @@ Page({
             title: '红黑记录本|体验、记录、分享生活',
             content: user.nickname + '正在分享ta的记录榜单，快来围观吧',
             path: '/pages/social/social?idx=' + idx,
-            success: res => {
+            success: () => {
                 swan.showToast({
                     title: '分享成功',
                     icon: 'none'
@@ -484,6 +523,12 @@ Page({
             fail: (err) => {
                 console.log(err);
             }
+        });
+    },
+
+    showNotify: function() {
+        swan.navigateTo({
+            url: '../notify/notify'
         });
     }
 });

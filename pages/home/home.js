@@ -19,7 +19,7 @@ Page({
         tags: [],
         currentTag: 0,
         records: [],
-        total: 0,
+        // total: 0,
         currentPage: 1,
         currentSize: 10,
         sortLabel: [{
@@ -58,6 +58,36 @@ Page({
         skipGuideCheck: true
     },
 
+    onInit: function () {
+        var that = this;
+        var current = that.data.currentTab;
+        // 请求具体内容
+        let data = {
+            tagId: that.data.currentTag,
+            recordType: current,
+            page: 1,
+            size: that.data.currentSize,
+            sortType: that.data.currentSort
+        };
+        util.request(api.ListRecords, data, "GET", false).then((res) => {
+            res.data.recordList.forEach(r => {
+                r.modifyTime = util.getDateDiff(r.modifyTime);
+            });
+            that.setData({
+                records: res.data.recordList,
+                // total: res.data.total
+            });
+        });
+        user.checkLogin().then(() => {
+            that.setData({
+                login: true
+            });
+        }).catch(() => {
+            that.setData({
+                login: false
+            });
+        });
+    },
     onLoad: function () {
         // 监听页面加载的生命周期函数
         var that = this;
@@ -94,15 +124,7 @@ Page({
         //         login: app.globalData.hasLogin
         //     });
         // }
-        user.checkLogin().then(() => {
-            that.setData({
-                login: true
-            });
-        }).catch(() => {
-            that.setData({
-                login: false
-            });
-        })
+
         swan.getSystemInfo({
             success: res => {
                 that.setData({
@@ -160,45 +182,6 @@ Page({
             currentPage: 1,
             login: login
         });
-        // 请求具体内容
-            let data = {
-                tagId: that.data.currentTag,
-                recordType: current,
-                page: 1,
-                size: that.data.currentSize,
-                sortType: that.data.currentSort
-            };
-            // let hasRed = false,
-            //     hasBlack = false,
-            //     hasBlue = false;
-            // util.request(api.ListRecords, data, "GET", false).then((res) => {
-            //     res.data.recordList.forEach(r => {
-            //         r.modifyTime = util.getDateDiff(util.strIsEmpty(r.modifyTime) ? r.addTime : r.modifyTime);
-            //         if (r.recordType === 0) {
-            //             hasRed = true;
-            //         } else if (r.recordType === 1) {
-            //             hasBlack = true;
-            //         } else {
-            //             hasBlue = true;
-            //         }
-            //     });
-            //     that.setData({
-            //         records: res.data.recordList,
-            //         total: res.data.total,
-            //         showRecordView: [hasRed, hasBlack, hasBlue],
-            //     });
-            // }).catch((err) => {
-            //     console.log(err);
-            // });
-            util.request(api.ListRecords, data, "GET", false).then((res) => {
-                res.data.recordList.forEach(r => {
-                    r.modifyTime = util.getDateDiff(r.modifyTime);
-                });
-                that.setData({
-                    records: res.data.recordList,
-                    total: res.data.total
-                });
-            })
     },
     onHide: function () {
         // 监听页面隐藏的生命周期函数
@@ -238,7 +221,7 @@ Page({
             });
             that.setData({
                 records: that.data.records.concat(res.data.recordList),
-                total: res.data.total
+                // total: res.data.total
             });
         })
     },
@@ -267,20 +250,8 @@ Page({
             currentPage: 1,
             tagBarBackground: that.data.backgroudColor[curTab]
         });
-        // if (current === 0) {
-        //     swan.setBackgroundColor({
-        //         backgroundColor: '#FAF5F5'
-        //     });
-        // } else if (current == 1) {
-        //     swan.setBackgroundColor({
-        //         backgroundColor: '#F5F5F5'
-        //     });
-        // } else {
-        //     swan.setBackgroundColor({
-        //         backgroundColor: '#F6FDFB'
-        //     });
-        // }
-        this.onShow();
+        that.onShow();
+        that.onInit();
     },
 
     switchTag: function (e) {
@@ -333,7 +304,7 @@ Page({
                 });
                 that.setData({
                     records: res.data.recordList,
-                    total: res.data.total,
+                    // total: res.data.total,
                     currentTag: tagId,
                     scrollIntoView: "view-" + tagId,
                     currentPage: 1,
@@ -348,7 +319,7 @@ Page({
         }
     },
 
-    previewImg: function (e) {
+    previewImg: function () {
         var that = this;
         var idx = that.data.currentDetailRecord;
         var urls = that.data.records[idx].picUrl;
@@ -429,7 +400,7 @@ Page({
                     that.setData({
                         currentSort: that.data.sortLabel[res.tapIndex].id
                     });
-                    that.onShow();
+                    that.onInit();
                 }
             }
         });
@@ -512,7 +483,7 @@ Page({
         })
     },
 
-    skipGuide: function() {
+    skipGuide: function () {
         var that = this;
         that.setData({
             showGuide: false
@@ -523,7 +494,7 @@ Page({
         });
     },
 
-    guideBeginUse: function() {
+    guideBeginUse: function () {
         var that = this;
         that.setData({
             showGuide: false
@@ -534,7 +505,7 @@ Page({
         });
     },
 
-    changeSkipCheckbox: function(e) {
+    changeSkipCheckbox: function (e) {
         var that = this;
         var val = e.detail.value;
         if (val.length === 0) {

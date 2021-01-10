@@ -98,7 +98,7 @@ function showErrorToast(msg, duration=2000) {
 function checkUrl(url) {
     let Expression = /http(s)?/;
     let objExp = new RegExp(Expression);
-    if (obj.objExp.test(s) === true) {
+    if (objExp.test(url) === true) {
         return true;
     } else {
         return false;
@@ -144,7 +144,6 @@ function getDateDiff(timeStr){
 	var minute = 1000 * 60;
 	var hour = minute * 60;
 	var day = hour * 24;
-	var halfamonth = day * 15;
 	var month = day * 30;
 	var now = new Date().getTime();
 	var diffValue = now - dateTimeStamp;
@@ -205,7 +204,7 @@ function uploadImg2OSS(uploadUrl, path, filename, params) {
                 success_action_status: '200',
                 signature: params.signature,
             },
-            success: function(res) {
+            success: function() {
                 resolve(filename);
             },
             fail: function(err) {
@@ -213,6 +212,50 @@ function uploadImg2OSS(uploadUrl, path, filename, params) {
             }
         })
     });
+}
+
+function dateFormat(fmt, date) {
+    let ret;
+    const opt = {
+        "Y+": date.getFullYear().toString(),
+        "m+": (date.getMonth() + 1).toString(),
+        "d+": date.getDate().toString(),
+        "H+": date.getHours().toString(),
+        "M+": date.getMinutes().toString(),
+        "S+": date.getSeconds().toString()
+    };
+    for (let k in opt) {
+        ret = new RegExp("(" + k + ")").exec(fmt);
+        if (ret) {
+            fmt = fmt.replace(ret[1], (ret[1].length == 1) ? (opt[k]) : (opt[k].padStart(ret[1].length, "0")))
+        };
+    };
+    return fmt;
+}
+
+function isYestday(theDate){
+    var date = (new Date());    //当前时间
+    var today = new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime(); //今天凌晨
+    var yestday = new Date(today - 24*3600*1000).getTime();
+    return theDate.getTime() < today && yestday <= theDate.getTime();
+
+}
+
+function getBriefDate(timeStr) {
+    let dateTimeStamp = new Date(Date.parse(timeStr.replace(/-/g, "/")));
+    let curTimeStamp = new Date();
+    let cy = curTimeStamp.getFullYear().toString(), dy = dateTimeStamp.getFullYear().toString();
+    let cm = curTimeStamp.getMonth().toString(), cd = curTimeStamp.getDate().toString();
+    let dm = dateTimeStamp.getMonth().toString(), dd = dateTimeStamp.getDate().toString();
+    if (cy == dy && cm == dm && cd == dd) {
+        return dateFormat("HH:MM", dateTimeStamp);
+    } else if (isYestday(dateTimeStamp)) {
+        return "昨天 " + dateFormat("HH:MM", dateTimeStamp);
+    } else if (cy == dy) {
+        return dateFormat("mm-dd HH:MM", dateTimeStamp);
+    } else {
+        return dateFormat("YYYY-mm-dd HH:MM", dateTimeStamp);
+    }
 }
 
 module.exports = {
@@ -227,4 +270,5 @@ module.exports = {
     strIsEmpty,
     randomString,
     uploadImg2OSS,
+    getBriefDate
 };

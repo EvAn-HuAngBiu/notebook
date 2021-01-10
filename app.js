@@ -9,7 +9,7 @@ const api = require("./config/api.js");
 /* globals swan */
 
 App({
-    onLaunch(options) {
+    onLaunch() {
         var that = this;
         if (swan.canIUse('getUpdateManager')) {
             const updateManager = swan.getUpdateManager()
@@ -77,7 +77,7 @@ App({
             })
         }
     },
-    onShow(options) {
+    onShow() {
         // do something when show
         var that = this;
         if (that.globalData.hasLogin === true) {
