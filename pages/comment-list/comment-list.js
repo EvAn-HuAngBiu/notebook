@@ -1,10 +1,9 @@
 const api = require("../../config/api.js");
 const util = require("../../util/util.js");
 const app = getApp();
-
+let hasLogin = false;
 Page({
     data: {
-        shareIdx: -1,
         share: {},
         redCnt: 0,
         blackCnt: 0,
@@ -13,7 +12,6 @@ Page({
         detailBackgrounColor: ["#F55E68", "#707070", "#49CAC1"],
         currentSort: 0,
         comments: {},
-        hasLogin: false,
         scrollHeight: 0,
         showExpandComments: [],
         replyType: 0,
@@ -24,20 +22,19 @@ Page({
         commentInputValue: '',
         comingType: 0
     },
+
     onLoad: function (options) {
         var that = this;
         // 监听页面加载的生命周期函数
         if (options.type == 0) {
             var previous = getCurrentPages();
             var previousData = previous[previous.length - 2].data;
+            hasLogin = previousData.hasLogin,
             that.setData({
-                shareIdx: options.shareIdx,
                 share: previousData.shareList[options.shareIdx],
                 redCnt: previousData.redCnts[options.shareIdx],
                 blackCnt: previousData.blackCnts[options.shareIdx],
                 blueCnt: previousData.blueCnts[options.shareIdx],
-                hasLogin: previousData.hasLogin,
-                commentType: options.type
             });
             this.listComments();
         } else {
@@ -55,13 +52,12 @@ Page({
                         }
                     })
                     res.data.share.shareDo.modifyTime = util.getDateDiff(res.data.share.shareDo.modifyTime);
+                    hasLogin = app.globalData.hasLogin,
                     that.setData({
                         share: res.data.share,
                         redCnt: redCnt,
                         blackCnt: blackCnt,
                         blueCnt: blueCnt,
-                        hasLogin: app.globalData.hasLogin,
-                        commentType: options.type
                     });
                     this.listComments();
                 }

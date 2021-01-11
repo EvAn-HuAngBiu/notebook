@@ -3,6 +3,11 @@ const util = require("../../util/util.js");
 const app = getApp();
 
 var startPoint;
+let curPage = 1;
+let curSize = 10;
+let windowHeight = '';
+let windowWidth = '';
+let firstShowFlag = false;
 Page({
     data: {
         tabs: [{
@@ -13,8 +18,8 @@ Page({
             name: 1
         }],
         currentTab: 0,
-        curPage: 1,
-        curSize: 10,
+        // curPage: 1,
+        // curSize: 10,
         shareList: [],
         // likeList: [],
         // collectList: [],
@@ -35,8 +40,8 @@ Page({
         detailBackgrounColor: ["#F55E68", "#707070", "#49CAC1"],
         bottomDis: 28,
         rightDis: 28,
-        windowHeight: '',
-        windowWidth: '',
+        // windowHeight: '',
+        // windowWidth: '',
         totalCommentCount: 26,
         currentUser: '',
         hasLogin: false,
@@ -46,55 +51,13 @@ Page({
         commentInput: '',
     },
     onInit: function() {
-
-    },
-    onLoad: function () {
-        var that = this;
-        let tags = [].concat(app.globalData.tags);
-        tags.unshift({
-            tagId: 0,
-            tagName: "所有"
-        });
-        swan.getStorage({
-            key: 'userInfo',
-            success: res => {
-                that.setData({
-                    currentUser: res.data
-                })
-            }
-        });
-        swan.getSystemInfo({
-            success: res => {
-                that.setData({
-                    windowHeight: res.windowHeight,
-                    windowWidth: res.windowWidth,
-                    tags: tags,
-                });
-            },
-            fail: err => {
-                console.log(err);
-            }
-        });
-    },
-    onReady: function () {
-        // 监听页面初次渲染完成的生命周期函数
-    },
-    onShow: function () {
         var that = this;
         var url = that.data.currentTab === 0 ? api.ShareListNew : api.ShareListHot;
-        let currentUser = that.data.currentUser;
-        if (that.data.currentUser == '') {
-            currentUser = swan.getStorageSync('userInfo').data;
-        }
-        that.setData({
-            curPage: 1,
-            hasLogin: app.globalData.hasLogin,
-            currentUser: currentUser
-        });
+        firstShowFlag = true;
         util.request(url, {
             tagId: that.data.currentTag,
             page: 1,
-            size: that.data.curSize
+            size: curSize
         }, "GET", false).then((res) => {
             let shareIds = [];
             let redCnts = [],
@@ -128,6 +91,50 @@ Page({
         }).catch((err) => {
             console.log(err);
         });
+
+    },
+    onLoad: function () {
+        var that = this;
+        let tags = [].concat(app.globalData.tags);
+        tags.unshift({
+            tagId: 0,
+            tagName: "所有"
+        });
+        that.setData({
+            tags: tags,
+        });
+        swan.getStorage({
+            key: 'userInfo',
+            success: res => {
+                that.setData({
+                    currentUser: res.data,
+                })
+            }
+        });
+        swan.getSystemInfo({
+            success: res => {
+                windowHeight = res.windowHeight;
+                windowWidth = res.windowWidth;
+            },
+            fail: err => {
+                console.log(err);
+            }
+        });
+    },
+    onReady: function () {
+        // 监听页面初次渲染完成的生命周期函数
+    },
+    onShow: function () {
+        var that = this;
+        let currentUser = that.data.currentUser;
+        if (that.data.currentUser == '') {
+            currentUser = swan.getStorageSync('userInfo').data;
+        }
+        curPage = 1;
+        that.setData({
+            hasLogin: app.globalData.hasLogin,
+            currentUser: currentUser
+        });
     },
     onHide: function () {
         // 监听页面隐藏的生命周期函数
@@ -139,9 +146,9 @@ Page({
         // 监听用户下拉动作
         swan.showNavigationBarLoading();
         let promise = new Promise((resolve) => {
-            this.onShow();
+            this.onInit();
             resolve(true);
-        })
+        });
         promise.then(() => {
             swan.pageScrollTo({
                 scrollTop: 0,
@@ -157,11 +164,11 @@ Page({
         var that = this;
         if (that.data.showDetail === false) {
             var url = that.data.currentTab === 0 ? api.ShareListNew : api.ShareListHot;
-            let page = that.data.curPage + 1;
+            let page = curPage + 1;
             util.request(url, {
                 tagId: that.data.currentTag,
                 page: page,
-                size: that.data.curSize
+                size: curSize
             }, "GET", false).then((res) => {
                 if (res.data.shareList.length == 0) {
                     swan.showToast({
@@ -196,12 +203,12 @@ Page({
                     blackCnts.push(black);
                     blueCnts.push(blue);
                 });
+                curPage = page;
                 this.setData({
                     shareList: that.data.shareList.concat(res.data.shareList),
                     redCnts: that.data.redCnts.concat(redCnts),
                     blackCnts: that.data.blackCnts.concat(blackCnts),
                     blueCnts: that.data.blueCnts.concat(blueCnts),
-                    curPage: page
                 });
                 // util.request(api.CheckLike, shareIds, "POST").then((innerRes) => {
                 //     this.setData({
@@ -228,11 +235,11 @@ Page({
 
     swiperNav: function (e) {
         if (e.type === "tap") {
+            curPage = 1;
             this.setData({
                 currentTab: e.target.dataset.current,
-                curPage: 1
             });
-            this.onShow();
+            this.onInit();
         } else {
             this.setData({
                 currentTab: e.detail.current
@@ -255,7 +262,7 @@ Page({
                 tagExpand: false
             });
         }
-        this.onShow();
+        this.onInit();
     },
 
     failLike: function (e) {
@@ -427,8 +434,8 @@ Page({
         var bottomDis = this.data.bottomDis - translateY
         var rightDis = this.data.rightDis - translateX
         //判断是移动否超出屏幕
-        if (rightDis + 50 >= this.data.windowWidth) {
-            rightDis = this.data.windowWidth - 50;
+        if (rightDis + 50 >= windowWidth) {
+            rightDis = windowWidth - 50;
         }
         if (rightDis <= 0) {
             rightDis = 0;
@@ -436,8 +443,8 @@ Page({
         if (bottomDis <= 0) {
             bottomDis = 0
         }
-        if (bottomDis + 50 >= this.data.windowHeight - 80) {
-            bottomDis = this.data.windowHeight - 80 - 50;
+        if (bottomDis + 50 >= windowHeight - 80) {
+            bottomDis = windowHeight - 80 - 50;
         }
         this.setData({
             bottomDis: bottomDis,

@@ -137,7 +137,7 @@ button::after {
 
 .card-area-block {
     margin-top: 8rpx;
-    margin-bottom: 32rpx;
+    /* margin-bottom: 32rpx; */
     background-color: white;
 }
 
@@ -540,4 +540,32 @@ button::after {
 .nav-notify-img {
     width: 36rpx;
     margin-left: 39rpx;
+}
+
+.comment-area-block {
+    margin: 2rpx 16rpx 14rpx 16rpx;
+}
+
+.comment-intro-line {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.comment-gray-text {
+    font-size: 24rpx;
+    font-family: Source Han Sans CN;
+    font-weight: 400;
+    line-height: 41rpx;
+    color: #B4B4B4;
+    opacity: 1;
+}
+
+.show-all-view-block {
+    display: flex;
+}
+
+.show-all-arrow-block {
+    margin-left: 9rpx;
+    padding: 4rpx 0 5rpx 0;
 }

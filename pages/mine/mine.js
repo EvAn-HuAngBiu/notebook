@@ -3,6 +3,9 @@ const api = require("../../config/api.js");
 const user = require("../../util/user.js");
 const util = require("../../util/util.js");
 
+let curPage = 1;
+let curSize = 10;
+let firstLoad = false;
 Page({
     data: {
         user: {nickName: "", gender: 0, avatarUrl: ""},
@@ -16,8 +19,8 @@ Page({
         redCnts: [],
         blackCnts: [],
         blueCnts: [],
-        curPage: 1,
-        curSize: 10,
+        // curPage: 1,
+        // curSize: 10,
         showSticky: false,
         showDetail: false,
         likeList: [],
@@ -29,6 +32,59 @@ Page({
         navHeight: 0,
         userInfoCardTop: 0,
         hasNewNotify: false
+    },
+    onInit: function() {
+        var that = this;
+        firstLoad = true;
+        // user.checkLogin().then(() => {
+        //     swan.getStorage({
+        //         key: 'userInfo',
+        //         success: res => {
+        //             console.log(res);
+        //             that.setData({
+        //                 login: true,
+        //                 user: res.data,
+        //             });
+        //         }
+        //     });
+        if (app.globalData.hasLogin) {
+            swan.getStorage({
+                key: 'userInfo',
+                success: res => {
+                    that.setData({
+                        login: true,
+                        user: res.data,
+                    });
+                }
+            });
+            curPage = 1;
+            util.request(api.MineIndex).then((res) => {
+                if (res.success === true) {
+                    that.setData({
+                        totalPublish: res.data.recordCount,
+                        gotLiked: res.data.totalRecord,
+                        newLikeCount: app.globalData.newLikeCount + res.data.newRecord > 99 ? 99 : app.globalData.newLikeCount + res.data.newRecord,
+                        totalCollect: res.data.collectCount,
+                        totalShare: res.data.shareCount,
+                        hasNewNotify: res.data.notifyCheck
+                    })
+                    this.listShares();
+                } else {
+                    console.log(res);
+                }
+            }).catch(err => {
+                console.log(err);
+            })
+        }
+        // }, () => {
+        //     app.globalData.hasLogin = false;
+        //     swan.removeStorage({
+        //         key: 'userId',
+        //     });
+        //     swan.removeStorage({
+        //         key: 'token',
+        //     });
+        // });
     },
     onLoad: function () {
         // 监听页面加载的生命周期函数
@@ -54,17 +110,14 @@ Page({
     onShow: function() {
         // 监听页面显示的生命周期函数
         var that = this;
-        that.setData({
-            currentTab: 0
-        });
-        user.checkLogin().then(() => {
-            let savedUserInfo = swan.getStorageSync('userInfo');
-            this.setData({
-                login: true,
-                user: savedUserInfo,
-                curPage: 1,
-                curSize: 10
-            });
+        // that.setData({
+        //     currentTab: 0
+        // });
+        let tab = that.data.currentTab;
+        if (firstLoad) {
+            firstLoad = false;
+        } else {
+            curPage = 1;
             util.request(api.MineIndex).then((res) => {
                 if (res.success === true) {
                     that.setData({
@@ -75,58 +128,14 @@ Page({
                         totalShare: res.data.shareCount,
                         hasNewNotify: res.data.notifyCheck
                     })
-                    this.listShares();
+                    tab == 0 ? this.listShares() : this.listCollects();
                 } else {
                     console.log(res);
                 }
             }).catch(err => {
                 console.log(err);
             })
-            // util.request(api.CountRecord, {}, "POST").then((res) => {
-            //     if (res.success === true) {
-            //         that.setData({
-            //             totalPublish: res.data.count
-            //         })
-            //     }
-            // });
-            // util.request(api.TotalRecord).then((res) => {
-            //     if (res.success === true) {
-            //         that.setData({
-            //             gotLiked: res.data.total,
-            //             newLikeCount: app.globalData.newLikeCount + res.data.new > 99 ? 99 : app.globalData.newLikeCount + res.data.new
-            //         })
-            //     }
-            // });
-            // util.request(api.CountCollect).then((res) => {
-            //     if (res.success === true) {
-            //         that.setData({
-            //             totalCollect: res.data.collectCount
-            //         })
-            //     }
-            // });
-            // util.request(api.ShareCount).then((res) => {
-            //     if (res.success === true) {
-            //         that.setData({
-            //             totalShare: res.data.total
-            //         })
-            //     }
-            // });
-            // util.request(api.CheckNewNotify).then((res) => {
-            //     if (res.success === true) {
-            //         that.setData({
-            //             hasNewNotify: res.data.check
-            //         })
-            //     }
-            // })
-        }, () => {
-            app.globalData.hasLogin = false;
-            swan.removeStorage({
-                key: 'userId',
-            });
-            swan.removeStorage({
-                key: 'token',
-            });
-        });
+        }
     },
     onHide: function() {
         // 监听页面隐藏的生命周期函数
@@ -140,9 +149,10 @@ Page({
     onReachBottom: function() {
         // 页面上拉触底事件的处理函数
         var that = this;
-        that.setData({
-            curPage: that.data.curPage + 1
-        });
+        // that.setData({
+        //     curPage: that.data.curPage + 1
+        // });
+        curPage = curPage + 1;
         var tab = that.data.currentTab;
         if (tab == 0) {
             this.listShares();
@@ -171,7 +181,7 @@ Page({
 
     listShares: function() {
         var that = this;
-        util.request(api.MyShare, {page: that.data.curPage, size: that.data.curSize}, "GET", false).then((res) => {
+        util.request(api.MyShare, {page: curPage, size: curSize}, "GET", false).then((res) => {
             if (res.data.shareList.length == 0) {
                 swan.showToast({
                     'title': '没有更多内容了',
@@ -228,7 +238,7 @@ Page({
             // }).catch((err) => {
             //     console.log(err);
             // });
-            if (that.data.curPage === 1) {
+            if (curPage === 1) {
                 this.setData({
                     shares: res.data.shareList,
                     redCnts: redCnts,
@@ -248,7 +258,7 @@ Page({
 
     listCollects: function() {
         var that = this;
-        util.request(api.ListCollect, {page: that.data.curPage, size: that.data.curSize}, "GET", false).then((res) => {
+        util.request(api.ListCollect, {page: curPage, size: curSize}, "GET", false).then((res) => {
             if (res.data.shareList.length == 0) {
                 swan.showToast({
                     'title': '没有更多内容了',
@@ -305,7 +315,7 @@ Page({
             // }).catch((err) => {
             //     console.log(err);
             // });
-            if (that.data.curPage === 1) {
+            if (curPage === 1) {
                 this.setData({
                     shares: res.data.shareList,
                     redCnts: redCnts,
@@ -357,9 +367,9 @@ Page({
         if (that.data.currentTab === tab) {
             return;
         }
+        curPage = 1;
         that.setData({
             currentTab: tab,
-            curPage: 1
         });
         if (tab == 0) {
             this.listShares();
@@ -529,6 +539,12 @@ Page({
     showNotify: function() {
         swan.navigateTo({
             url: '../notify/notify'
+        });
+    },
+
+    showAllComments: function(e) {
+        swan.navigateTo({
+            url: '../comment-list/comment-list?type=1&shareId=' + e.currentTarget.dataset.shareIdx
         });
     }
 });

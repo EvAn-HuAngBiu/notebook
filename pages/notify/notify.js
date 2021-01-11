@@ -1,11 +1,11 @@
 const api = require("../../config/api.js");
 const util = require("../../util/util.js");
 
+let page = 1;
+let size = 10;
 Page({
     data: {
         notifies: {},
-        page: 1,
-        size: 10
     },
     onInit: function () {
         util.request(api.ListNotifies).then((res) => {
@@ -31,10 +31,8 @@ Page({
     },
     onShow: function () {
         // 监听页面显示的生命周期函数
-        this.setData({
-            page: 1,
-            size: 10
-        })
+        page = 1;
+        size = 10;
     },
     onHide: function () {
         // 监听页面隐藏的生命周期函数

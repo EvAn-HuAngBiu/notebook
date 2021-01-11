@@ -3,6 +3,11 @@ const api = require("../../config/api.js");
 const util = require("../../util/util.js");
 const user = require("../../util/user.js");
 var startPoint;
+let currentPage = 1;
+let currentSize = 10;
+let windowHeight = '';
+let windowWidth = '';
+
 Page({
     data: {
         tabs: [{
@@ -20,8 +25,8 @@ Page({
         currentTag: 0,
         records: [],
         // total: 0,
-        currentPage: 1,
-        currentSize: 10,
+        // currentPage: 1,
+        // currentSize: 10,
         sortLabel: [{
             name: '最高评价',
             id: 0
@@ -52,8 +57,8 @@ Page({
         showRecordView: [],
         bottomDis: 28,
         rightDis: 28,
-        windowHeight: '',
-        windowWidth: '',
+        // windowHeight: '',
+        // windowWidth: '',
         showGuide: false,
         skipGuideCheck: true
     },
@@ -66,7 +71,7 @@ Page({
             tagId: that.data.currentTag,
             recordType: current,
             page: 1,
-            size: that.data.currentSize,
+            size: currentSize,
             sortType: that.data.currentSort
         };
         util.request(api.ListRecords, data, "GET", false).then((res) => {
@@ -127,10 +132,12 @@ Page({
 
         swan.getSystemInfo({
             success: res => {
-                that.setData({
-                    windowHeight: res.windowHeight,
-                    windowWidth: res.windowWidth,
-                });
+                // that.setData({
+                //     windowHeight: res.windowHeight,
+                //     windowWidth: res.windowWidth,
+                // });
+                windowHeight = res.windowHeight;
+                windowWidth = res.windowWidth;
             },
             fail: err => {
                 console.log(err);
@@ -171,17 +178,18 @@ Page({
                 backgroundColor: '#F6FDFB'
             });
         }
-        let login = that.data.login;
-        if (app.globalData.hasLogin === true) {
-            login = true;
+        if (that.data.login == false && app.globalData.hasLogin === true) {
+            this.onInit();
         }
         // 动态设置添加按钮位置和页码
         that.setData({
             rightDis: 28,
             bottomDis: 28,
-            currentPage: 1,
-            login: login
         });
+        currentPage = 1;
+        if (that.data.login == false && app.globalData.login == true) {
+            this.onInit();
+        }
     },
     onHide: function () {
         // 监听页面隐藏的生命周期函数
@@ -194,14 +202,15 @@ Page({
     },
     onReachBottom: function () {
         var that = this;
-        that.setData({
-            currentPage: that.data.currentPage + 1
-        });
+        // that.setData({
+        //     currentPage: that.data.currentPage + 1
+        // });
+        currentPage = currentPage + 1;
 
         let data = {
             tagId: that.data.currentTag,
             recordType: that.data.currentTab,
-            page: that.data.currentPage,
+            page: currentPage,
             size: that.data.currentSize,
             sortType: that.data.currentSort
         };
@@ -211,9 +220,10 @@ Page({
                     'title': '没有更多内容了',
                     'icon': 'none'
                 });
-                that.setData({
-                    currentPage: that.data.currentPage - 1
-                });
+                // that.setData({
+                //     currentPage: that.data.currentPage - 1
+                // });
+                currentPage = currentPage - 1;
                 return;
             }
             res.data.recordList.forEach(r => {
@@ -247,9 +257,9 @@ Page({
         let curTab = e.target.dataset.current;
         that.setData({
             currentTab: curTab,
-            currentPage: 1,
             tagBarBackground: that.data.backgroudColor[curTab]
         });
+        currentPage = 1;
         that.onShow();
         that.onInit();
     },
@@ -307,8 +317,8 @@ Page({
                     // total: res.data.total,
                     currentTag: tagId,
                     scrollIntoView: "view-" + tagId,
-                    currentPage: 1,
                 });
+                currentPage = 1;
             })
         }
 
@@ -465,8 +475,8 @@ Page({
         var bottomDis = this.data.bottomDis - translateY
         var rightDis = this.data.rightDis - translateX
         //判断是移动否超出屏幕
-        if (rightDis + 50 >= this.data.windowWidth) {
-            rightDis = this.data.windowWidth - 50;
+        if (rightDis + 50 >= windowWidth) {
+            rightDis = windowWidth - 50;
         }
         if (rightDis <= 0) {
             rightDis = 0;
@@ -474,8 +484,8 @@ Page({
         if (bottomDis <= 0) {
             bottomDis = 0
         }
-        if (bottomDis + 50 >= this.data.windowHeight - 80) {
-            bottomDis = this.data.windowHeight - 80 - 50;
+        if (bottomDis + 50 >= windowHeight - 80) {
+            bottomDis = windowHeight - 80 - 50;
         }
         this.setData({
             bottomDis: bottomDis,
