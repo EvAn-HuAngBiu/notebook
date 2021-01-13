@@ -45,13 +45,6 @@
         </view>
         </view>
     </view>
-    <!-- <view class="publish-share-block" bind:tap="shareRecord">
-        <view>
-            <image s-if="{{isShared == 0}}" class="publish-icon-style" src="../../images/social.png"></image>
-            <image s-else class="publish-icon-style" src="../../images/social@selected.png"></image>
-        </view>
-        <view class="publish-share-text" style="color: {{isShared == 0 ? '#B4B4B4' : '#F55E68'}};">同步到社区</view>
-    </view> -->
     <view class="add-btn-style" bind:tap="updateRecord">提交</view>
 </view>
 

@@ -36,17 +36,6 @@ Page({
     onInit: function() {
         var that = this;
         firstLoad = true;
-        // user.checkLogin().then(() => {
-        //     swan.getStorage({
-        //         key: 'userInfo',
-        //         success: res => {
-        //             console.log(res);
-        //             that.setData({
-        //                 login: true,
-        //                 user: res.data,
-        //             });
-        //         }
-        //     });
         if (app.globalData.hasLogin) {
             swan.getStorage({
                 key: 'userInfo',
@@ -68,6 +57,12 @@ Page({
                         totalShare: res.data.shareCount,
                         hasNewNotify: res.data.notifyCheck
                     })
+                    if (that.data.newLikeCount > 0 && that.data.hasNewNotify == false) {
+                        swan.hideTabBarRedDot({
+                            index: 2
+                        });
+                    }
+                    app.globalData.newLikeCount = 0;
                     this.listShares();
                 } else {
                     console.log(res);
@@ -76,21 +71,9 @@ Page({
                 console.log(err);
             })
         }
-        // }, () => {
-        //     app.globalData.hasLogin = false;
-        //     swan.removeStorage({
-        //         key: 'userId',
-        //     });
-        //     swan.removeStorage({
-        //         key: 'token',
-        //     });
-        // });
     },
     onLoad: function () {
         // 监听页面加载的生命周期函数
-        swan.removeTabBarBadge({
-            index: 2
-        });
         let capsule = swan.getMenuButtonBoundingClientRect();
         swan.getSystemInfo({
             success: res => {
@@ -127,7 +110,12 @@ Page({
                         totalCollect: res.data.collectCount,
                         totalShare: res.data.shareCount,
                         hasNewNotify: res.data.notifyCheck
-                    })
+                    });
+                    if (that.data.newLikeCount >= 0 && that.data.hasNewNotify == false) {
+                        swan.hideTabBarRedDot({
+                            index: 2
+                        });
+                    }
                     tab == 0 ? this.listShares() : this.listCollects();
                 } else {
                     console.log(res);

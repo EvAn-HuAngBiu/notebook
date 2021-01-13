@@ -203,7 +203,7 @@ Page({
         that.setData({
             currentSort: that.data.currentSort == 0 ? 1 : 0
         });
-        that.onShow();
+        that.listComments();
     },
 
     showAllComments: function(e) {

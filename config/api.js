@@ -1,7 +1,7 @@
 // 业务API的请求地址
 // var ApiRoot = 'http://localhost:9801/';
 // var ApiRoot = 'http://10.206.245.40:9801/';
-// var ApiRoot = 'http://192.168.1.103:9801/';
+// var ApiRoot = 'http://192.168.1.104:9801/';
 var ApiRoot = 'https://www.rblacklist.cn/';
 
 module.exports = {
@@ -53,5 +53,7 @@ module.exports = {
     UncheckNewNotify: ApiRoot + 'notify/uncheck',
     ListNotifies: ApiRoot + 'notify/list',
 
-    MineIndex: ApiRoot + 'mine/index'
+    MineIndex: ApiRoot + 'mine/index',
+    MineCheckNew: ApiRoot + 'mine/check-new',
+    MineAuditResult: ApiRoot + 'mine/audit-result',
 };

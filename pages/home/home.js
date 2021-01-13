@@ -60,7 +60,7 @@ Page({
         // windowHeight: '',
         // windowWidth: '',
         showGuide: false,
-        skipGuideCheck: true
+        skipGuideCheck: true,
     },
 
     onInit: function () {
@@ -117,19 +117,6 @@ Page({
                 tags: tags
             });
         }
-        // 获取登录状态
-        // if (app.globalData.hasLogin === false) {
-        //     app.loginInfoCallback = (res) => {
-        //         that.setData({
-        //             login: res
-        //         })
-        //     }
-        // } else {
-        //     that.setData({
-        //         login: app.globalData.hasLogin
-        //     });
-        // }
-
         swan.getSystemInfo({
             success: res => {
                 // that.setData({
@@ -178,9 +165,6 @@ Page({
                 backgroundColor: '#F6FDFB'
             });
         }
-        if (that.data.login == false && app.globalData.hasLogin === true) {
-            this.onInit();
-        }
         // 动态设置添加按钮位置和页码
         that.setData({
             rightDis: 28,
@@ -190,6 +174,30 @@ Page({
         if (that.data.login == false && app.globalData.login == true) {
             this.onInit();
         }
+        util.request(api.MineAuditResult).then((res) => {
+            if (res.success == true && res.data.result.length > 0) {
+                let msg = "您发布标题为[";
+                let auditLabel = "";
+                for (let i = 0; i < res.data.result.length; i++) {
+                    if (i != 0) {
+                        msg += ", ";
+                        auditLabel += ", ";
+                    }
+                    msg += res.data.result[i].recordTitle;
+                    auditLabel += res.data.result[i].auditResult;
+                }
+                msg += "]的记录, 因包含: [" + auditLabel + "]等内容, 违反小程序内容要求，已被删除。请您遵守相关法律法规，共同维护绿色和谐的网络空间。";
+                swan.showModal({
+                    title: '违规警告',
+                    content: msg,
+                    showCancel: false,
+                    confirmColor: '#ff0000',
+                    success: () => {
+                        this.onInit();
+                    }
+                })
+            }
+        })
     },
     onHide: function () {
         // 监听页面隐藏的生命周期函数

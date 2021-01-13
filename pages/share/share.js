@@ -29,15 +29,6 @@ Page({
     onLoad: function (option) {
         // 监听页面加载的生命周期函数
         var that = this;
-        // util.request(api.ListAllTags).then((res) => {
-        //     that.setData({
-        //         tags: res.data.tags,
-        //         currentTag: typeof option.tag === "undefined" ? 1 : (option.tag === "0" ? "1" : option.tag),
-        //         scrollIntoView: typeof option.tag === "undefined" ? "view-1" : "view-" + (option.tag == 0 ? 1 : option.tag)
-        //     });
-        // }).catch((err) => {
-        //     console.log(err);
-        // });
         let tags;
         if (app.globalData.tags.length === 0) {
             app.tagListCallback = (res) => {
@@ -178,10 +169,16 @@ Page({
                 that.setData({
                     recordChooseStatus: status
                 });
-                swan.navigateBack();
-                swan.showToast({
-                    title: '分享成功',
-                    icon: 'none'
+                swan.navigateBack({
+                    delta: 1,
+                    success: () => {
+                        let page = getCurrentPages();
+                        page[0].onInit();
+                        swan.showToast({
+                            title: '分享成功',
+                            icon: 'none'
+                        });
+                    }
                 });
             } else {
                 console.error(res);

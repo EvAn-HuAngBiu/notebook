@@ -61,19 +61,15 @@ Page({
                     that.setData({
                         ['notifies[' + idx + '].readType']: true
                     });
-                    swan.navigateTo({
-                        url: '../comment-list/comment-list?type=1&shareId=' + shareId
-                    });
                 } else {
                     console.log(res.code);
                 }
             }).catch(err => {
                 console.log(err);
-            })
-        } else {
-            swan.navigateTo({
-                url: '../comment-list/comment-list?type=1&shareId=' + shareId
             });
         }
+        swan.navigateTo({
+            url: '../comment-list/comment-list?type=1&shareId=' + shareId
+        });
     }
 });

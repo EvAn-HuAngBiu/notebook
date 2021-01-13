@@ -24,7 +24,6 @@
             add-picture-class="ext-picture-item-class" close-class="ext-close-class" />
     </view>
     <view class="split-line"></view>
-    <!-- <view class="tab-tag-block"> -->
     <view>
         <view class="tab-choose-view">
             <view s-for="tab in tabs" data-tab-idx="{{tab.name}}" bind:tap="changeTab">

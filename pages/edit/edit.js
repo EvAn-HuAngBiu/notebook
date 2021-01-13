@@ -17,7 +17,6 @@ Page({
         currentTab: 0,
         tags: [],
         currentTag: 1,
-        isShared: 0,
         title: '',
         text: '',
         rate: 0,
@@ -82,34 +81,6 @@ Page({
         that.setData({
             urlLocalList: images
         });
-        // let promise = Promise.all(images.map((image) => {
-        //     return new Promise((resolve, reject) => {
-        //         swan.ai.imageAudit({
-        //             image,
-        //             success: (res) => {
-        //                 if (res.conclusionType === 1) {
-        //                     resolve(true);
-        //                 } else {
-        //                     reject(res.data[0].msg);
-        //                 }
-        //             },
-        //             fail: (err) => {
-        //                 console.error(err);
-        //             }
-        //         });
-        //     })
-        // }));
-        // promise.then((res) => {
-        //     that.setData({
-        //         urlLocalList: images,
-        //     });
-        // }).catch((err) => {
-        //     swan.showModal({
-        //         title: '失败',
-        //         content: '图片违规: ' + err,
-        //         showCancel: false,
-        //     });
-        // })
     },
 
     changeTab: function(e) {
@@ -128,13 +99,6 @@ Page({
             currentTag: idx,
             scrollIntoView: "view-" + idx
         })
-    },
-
-    shareRecord: function() {
-        var that = this;
-        that.setData({
-            isShared: that.data.isShared == 0 ? 1 : 0
-        });
     },
 
     inputTitle: function(e) {
@@ -164,10 +128,6 @@ Page({
             util.showErrorToast("请输入标题");
             return;
         }
-        // if (util.strIsEmpty(that.data.text)) {
-        //     util.showErrorToast("请输入内容");
-        //     return;
-        // }
         if (that.data.rate === 0) {
             util.showErrorToast("请选择评分");
             return;
@@ -211,6 +171,12 @@ Page({
                         swan.navigateBack({
                             detail: 1,
                             success: () => {
+                                let page = getCurrentPages();
+                                    page[0].setData({
+                                        currentTag: that.data.currentTag,
+                                        scrollIntoView: "view-" + that.data.currentTag,
+                                    });
+                                    page[0].onInit();
                                 swan.showToast({
                                     title: '修改成功'
                                 });
@@ -251,6 +217,5 @@ Page({
     },
 
     preventCloseExpand: function() {
-
     }
 });

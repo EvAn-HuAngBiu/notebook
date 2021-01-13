@@ -30,10 +30,9 @@
                     <view s-for="record in share.recordDo" class="record-item">
                         <block s-if="{{record.recordType == 0}}">
                             <view class="record-item-img" style="background-color: #F55E68; border-radius:50%;">
-                            <image s-if="{{record.picUrl.length == 0}}" style="width: 48rpx;height: 48rpx; transform: scale(0.6);"
-                                src="../../images/tag/{{share.shareDo.tagId}}.png">
+                            <image s-if="{{record.picUrl.length == 0}}" style="width: 48rpx;height: 48rpx; transform: scale(0.6);" src="../../images/tag/{{share.shareDo.tagId}}.png">
                             </image>
-                            <image s-else class="record-item-img-src" src="{{record.picUrl[0]}}" mode="aspectFill"></image>
+                            <image s-else class="record-item-img-src" src="{{record.picUrl[0]}}" mode="aspectFill" lazy-load="true"></image>
                         </view>
                             <!-- <icon s-else type="info" size="24" color="white" style="margin: 16rpx"></icon> -->
                             <view class="record-item-text">{{record.recordTitle}}</view>
@@ -55,7 +54,7 @@
                             <image s-if="{{record.picUrl.length == 0}}" style="width: 48rpx;height: 48rpx; transform: scale(0.6);"
                                 src="../../images/tag/{{share.shareDo.tagId}}.png">
                             </image>
-                            <image s-else class="record-item-img-src" src="{{record.picUrl[0]}}" mode="aspectFill"></image>
+                            <image s-else class="record-item-img-src" src="{{record.picUrl[0]}}" mode="aspectFill" lazy-load="true"></image>
                             </view>
                             <view class="record-item-text">{{record.recordTitle}}</view>
                             <block s-if="{{record.picUrl.length > 0}}">
@@ -76,7 +75,7 @@
                             <image s-if="{{record.picUrl.length == 0}}" style="width: 48rpx;height: 48rpx; transform: scale(0.6);"
                                 src="../../images/tag/{{share.shareDo.tagId}}.png">
                             </image>
-                            <image s-else class="record-item-img-src" src="{{record.picUrl[0]}}" mode="aspectFill"></image>
+                            <image s-else class="record-item-img-src" src="{{record.picUrl[0]}}" mode="aspectFill" lazy-load="true"></image>
                             </view>
                             <view class="record-item-text">{{record.recordTitle}}</view>
                             <block s-if="{{record.picUrl.length > 0}}">
@@ -201,7 +200,7 @@
         </view>
         <view class="detail-record-item-subtitle">{{record.recordText}}</view>
         <view class="record-item-img-list" s-if="{{record.picUrl.length > 0}}">
-            <image class="image-items" s-for="picUrl in record.picUrl" src="{{picUrl}}" data-type-idx="{{idx}}" data-record-idx="{{ridx}}" mode="widthFix" bindtap="previewImg"></image>
+            <image class="image-items" s-for="picUrl in record.picUrl" src="{{picUrl}}" data-type-idx="{{idx}}" data-record-idx="{{ridx}}" mode="widthFix" bindtap="previewImg" lazy-load="true"></image>
         </view>
     </view>
 </scroll-view>

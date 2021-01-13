@@ -80,19 +80,16 @@ App({
     onShow() {
         // do something when show
         var that = this;
-        if (that.globalData.hasLogin === true) {
-            util.request(api.TotalRecord).then((res) => {
-                if (res.success === true) {
-                    that.globalData.newLikeCount = res.data.new > 99 ? 99 : res.data.new
-                    if (res.data.new > 0) {
-                        swan.setTabBarBadge({
-                            index: 2,
-                            text: res.data.new
-                        });
-                    }
+        util.request(api.MineCheckNew).then((res) => {
+            if (res.success === true) {
+                that.globalData.newLikeCount = res.data.likeCnt > 99 ? 99 : res.data.likeCnt;
+                if (res.data.result === true) {
+                    swan.showTabBarRedDot({
+                        index: 2
+                    });
                 }
-            });
-        }
+            }
+        })
     },
     onHide() {
         // do something when hide

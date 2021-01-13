@@ -19,7 +19,7 @@ page {
 .notify-block-split-line {
     width: 592rpx;
     height: 0rpx;
-    border: 1px solid #F5F5F5;
+    border: .5rpx solid #F5F5F5;
     opacity: 1;
     margin-left: 128rpx;
 }

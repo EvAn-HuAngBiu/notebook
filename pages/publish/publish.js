@@ -132,65 +132,6 @@ Page({
         swan.showLoading({
             title: '请稍候'
         });
-        // // 内容审查
-        // let titleReviewPromise = new Promise((resolve, reject) => {
-        //     swan.ai.textReview({
-        //         content: that.data.title,
-        //         success: (res) => {
-        //             if (res.result.spam !== 0) {
-        //                 reject("标题存在违禁内容");
-        //             } else {
-        //                 resolve(true);
-        //             }
-        //         },
-        //         fail: (err) => {
-        //             console.error(err);
-        //             reject("审核失败");
-        //         }
-        //     });
-        // })
-        // let textReivewPromise = new Promise((resolve, reject) => {
-        //     if (!util.strIsEmpty(that.data.text)) {
-        //         swan.ai.textReview({
-        //             content: that.data.text,
-        //             success: (res) => {
-        //                 if (res.result.spam !== 0) {
-        //                     reject("发布内容存在违禁内容");
-        //                 } else {
-        //                     resolve(true);
-        //                 }
-        //             },
-        //             fail: (err) => {
-        //                 console.error(err);
-        //                 reject("审核失败");
-        //             }
-        //         });
-        //     } else {
-        //         resolve(true);
-        //     }
-        // });
-        // // 图像审查
-        // let imageReviewPromises = [];
-        // for (let filePath in that.data.urlLocalList) {
-        //     imageReviewPromises.push(new Promise((resolve, reject) => {
-        //         swan.ai.imageAudit({
-        //             image: filePath,
-        //             success: (res) => {
-        //                 if (res.conclusionType === 1) {
-        //                     resolve(true);
-        //                 } else {
-        //                     reject("图片审核失败" + res.data[0].msg);
-        //                 }
-        //             },
-        //             fail: (err) => {
-        //                 console.error(err);
-        //                 reject("审核失败");
-        //             }
-        //         });
-        //     }));
-        // }
-
-        // Promise.all([textReivewPromise, titleReviewPromise].concat(imageReviewPromises)).then(() => {
             util.request(api.SignatureUpload, {}, 'POST').then((sig) => {
                 let filePicUrl = that.data.urlLocalList;
                 let promise = Promise.all(filePicUrl.map((filePath) => {
@@ -226,6 +167,7 @@ Page({
                                         currentTag: that.data.currentTag,
                                         scrollIntoView: "view-" + that.data.currentTag,
                                     });
+                                    page[0].onInit();
                                     swan.showToast({
                                         title: '添加成功'
                                     });
@@ -246,13 +188,6 @@ Page({
                 console.error(err);
                 util.showErrorToast("校验失败");
             })
-        // }).catch((err) => {
-        //     swan.hideLoading();
-        //     swan.showModal({
-        //         title: '发布审核失败',
-        //         content: err
-        //     });
-        // })
     },
 
     showExpand: function () {
